@@ -9,4 +9,5 @@ function truncate(str, lengthValue){
   return (str.length > lengthValue);
 }
 
-truncate("Bla", 1);
+truncate('Bla', 1);
+
