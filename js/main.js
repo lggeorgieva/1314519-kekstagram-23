@@ -3,3 +3,17 @@ function randomIntFromInterval(min, max) { // min and max included
 }
 
 
+randomIntFromInterval(1, 100);
+
+function truncate(str, n){
+  return (str.length > n) ? true : false;
+}
+
+truncate("Bla", 1);
+
+
+
+
+
+
+
