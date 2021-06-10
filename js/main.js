@@ -11,3 +11,17 @@ function truncate(str, lengthValue){
 
 truncate('Bla', 1);
 
+// Between 0 and max
+
+function randomZeroMax(max){
+return Math.floor(Math.random() * (max + 1));
+}
+
+randomZeroMax(10);
+
+// Between 1 and max
+
+function randomOneMax(max){
+return Math.floor(Math.random() * max) + 1;}
+
+randomOneMax(5);
