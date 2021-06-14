@@ -1,27 +1,20 @@
 function randomIntFromInterval(min, max) { // min and max included
+if (min < 0 || max < 0) {
+    return 'min и max должны быть больше нуля!';
+  }
+
+
+
+if(min > max){
+  [min, max] = [max, min];
+    //max = [min, max = min][0];
+
+
+}
   return Math.floor(Math.random() * (max - min + 1) + min);
+
 }
 
-randomIntFromInterval(1, 100);
-
-function truncate(str, lengthValue){
-
-  return (str.length > lengthValue);
-}
-
-truncate('Bla', 1);
-
-// Between 0 and max
-
-function randomZeroMax(max){
-  return Math.floor(Math.random() * (max + 1));
-}
-
-randomZeroMax(10);
-
-// Between 1 and max
-
-function randomOneMax(max){
-  return Math.floor(Math.random() * max) + 1;}
-
-randomOneMax(5);
+console.log(randomIntFromInterval(1, 100));
+//console.log(randomIntFromInterval(100, 1));
+//console.log(randomIntFromInterval(-100, 1));
