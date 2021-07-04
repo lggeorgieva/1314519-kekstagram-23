@@ -10,7 +10,7 @@ function randomIntFromInterval(min, max) { // min and max included
   }
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
-
+ 
 const message =['Всё отлично!', 'В целом всё неплохо.', 'Но не всё.',
   'Когда вы делаете фотографию, хорошо бы убирать палец из кадра.',
   'В конце концов это просто непрофессионально.',
