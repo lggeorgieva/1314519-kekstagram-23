@@ -1,4 +1,4 @@
-import './util.js';
+import {randomIntFromInterval} from './util.js';
 
 const message =['Всё отлично!', 'В целом всё неплохо.', 'Но не всё.',
   'Когда вы делаете фотографию, хорошо бы убирать палец из кадра.',
@@ -21,3 +21,5 @@ for(let idx = 1; idx <= 25; idx++){
   };
   images.push(image);
 }
+
+export {images};
