@@ -23,7 +23,7 @@ const authors= ['Lilia', 'Patrick', 'Vivi', 'Olga', 'Daniel'];
 for(let idx = 1; idx <= 25; idx++){
   const image = {
     id: idx,
-    url: 'photos/'+ idx + '.jpg',
+    url: 'photos/{{i}}.jpg'.replace('{{i}}', idx),
     description: 'Lovely lake',
     likes: randomIntFromInterval(15, 200),
     comments: message[randomIntFromInterval(0, message.length-1)],
