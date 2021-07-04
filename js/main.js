@@ -10,7 +10,7 @@ function randomIntFromInterval(min, max) { // min and max included
   }
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
- 
+
 const message =['Всё отлично!', 'В целом всё неплохо.', 'Но не всё.',
   'Когда вы делаете фотографию, хорошо бы убирать палец из кадра.',
   'В конце концов это просто непрофессионально.',
@@ -20,16 +20,15 @@ const message =['Всё отлично!', 'В целом всё неплохо.'
 
 const authors= ['Lilia', 'Patrick', 'Vivi', 'Olga', 'Daniel'];
 
-for(let idx =1; idx<= 25; idx++){
+for(let idx = 1; idx <= 25; idx++){
   const image = {
     id: idx,
     url: 'photos/'+ idx + '.jpg',
     description: 'Lovely lake',
     likes: randomIntFromInterval(15, 200),
     comments: message[randomIntFromInterval(0, message.length-1)],
-    name: authors[randomIntFromInterval(0, authors.length-1)]
-  }
+    name: authors[randomIntFromInterval(0, authors.length-1)],
+  };
   images.push(image);
 }
-
 //console.log(images);
