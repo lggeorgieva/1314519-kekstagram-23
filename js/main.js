@@ -20,13 +20,24 @@ const message =['Всё отлично!', 'В целом всё неплохо.'
 
 const authors= ['Lilia', 'Patrick', 'Vivi', 'Olga', 'Daniel'];
 
+
+function randomComment(idx){
+  const comment = {
+    id: idx,
+    avatar: 'img/avatar-{{i}}.svg'.replace('{{i}}', randomIntFromInterval(1, 6)),
+    message: message[randomIntFromInterval(0, message.length-1)],
+    name: authors[randomIntFromInterval(0, authors.length-1)],
+  };
+  return comment;
+}
+
 for(let idx = 1; idx <= 25; idx++){
   const image = {
     id: idx,
     url: 'photos/{{i}}.jpg'.replace('{{i}}', idx),
     description: 'Lovely lake',
     likes: randomIntFromInterval(15, 200),
-    comments: message[randomIntFromInterval(0, message.length-1)],
+    comments: [randomComment(2*idx),randomComment(2*idx +1) ],
     name: authors[randomIntFromInterval(0, authors.length-1)],
   };
   images.push(image);
