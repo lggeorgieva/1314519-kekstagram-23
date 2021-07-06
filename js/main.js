@@ -1,3 +1,5 @@
+//Для меня этот код компилируется. У меня был запасной ), но в предыдущей версии
+
 const images =[];
 
 function randomIntFromInterval(min, max) { // min and max included
@@ -24,12 +26,13 @@ const authors= ['Lilia', 'Patrick', 'Vivi', 'Olga', 'Daniel'];
 function randomComment(idx){
   const comment = {
     id: idx,
-    avatar: 'img/avatar-' + randomIntFromInterval(1, 6))  +  '.svg',
+    avatar: 'img/avatar-' + randomIntFromInterval(1, 6)  +  '.svg',
     message: message[randomIntFromInterval(0, message.length-1)],
     name: authors[randomIntFromInterval(0, authors.length-1)],
   };
   return comment;
 }
+
 
 for(let idx = 1; idx <= 25; idx++){
   const image = {
