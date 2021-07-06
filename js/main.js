@@ -24,7 +24,7 @@ const authors= ['Lilia', 'Patrick', 'Vivi', 'Olga', 'Daniel'];
 function randomComment(idx){
   const comment = {
     id: idx,
-    avatar: 'img/avatar-{{i}}.svg'.replace('{{i}}', randomIntFromInterval(1, 6)),
+    avatar: 'img/avatar-' + randomIntFromInterval(1, 6))  +  '.svg',
     message: message[randomIntFromInterval(0, message.length-1)],
     name: authors[randomIntFromInterval(0, authors.length-1)],
   };
@@ -34,7 +34,7 @@ function randomComment(idx){
 for(let idx = 1; idx <= 25; idx++){
   const image = {
     id: idx,
-    url: 'photos/{{i}}.jpg'.replace('{{i}}', idx),
+    url: 'photos/' + idx +'.jpg',
     description: 'Lovely lake',
     likes: randomIntFromInterval(15, 200),
     comments: [randomComment(2*idx),randomComment(2*idx +1) ],
