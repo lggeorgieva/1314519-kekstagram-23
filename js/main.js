@@ -37,7 +37,7 @@ function randomComment(idx){
 for(let idx = 1; idx <= 25; idx++){
   const image = {
     id: idx,
-    url: 'photos/' + idx +'.jpg',
+    url: `photos/${idx}.jpg`
     description: 'Lovely lake',
     likes: randomIntFromInterval(15, 200),
     comments: [randomComment(2*idx),randomComment(2*idx +1) ],
