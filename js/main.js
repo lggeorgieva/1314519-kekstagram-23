@@ -1,48 +1,54 @@
-//Для меня этот код компилируется. У меня был запасной ), но в предыдущей версии
 
-const images =[];
+//alert("Hello!");
+//document.getElementById('ImageOverDone').style.display= 'block';
+//document.querySelector('.img-upload__overlay').style.display= 'block';
 
-function randomIntFromInterval(min, max) { // min and max included
-  if (min < 0 || max < 0) {
-    return 'min и max должны быть больше нуля!';
+function loadImage() {
+//  const preview = document.querySelector('img');
+  const file = document.querySelector('input[type=file]').files[0];
+  //alert(file.name);
+  //document.querySelector('.img-upload__overlay').style.display= 'block';
+  document.getElementById('ImageSelected').src='img/' + file.name;
+  //document.getElementById('ImageSelected').style='transform: scale(0.75)';
+  let overlay = document.querySelector('.img-upload__overlay');
+  overlay.classList.remove('hidden');
+  //overlay.classList.add('modal-open');
+  document.body.classList.add('modal-open');
+  //const reader = new FileReader();
+
+  //reader.addEventListener("load", function () {
+    // convert image file to base64 string
+    //preview.src = reader.result;
+  //}, false);
+
+  //if (file) {
+  //  reader.readAsDataURL(file);
+//  }
+}
+
+
+function closeImage() {
+  document.body.classList.remove('modal-open');
+  let overlay = document.querySelector('.img-upload__overlay');
+  overlay.classList.add('hidden');
+  //document.querySelector('.img-upload__overlay').style.display= 'none';
+}
+
+
+let scaleFactor = 100;
+
+function reduceScaleBy25() {
+  if (scaleFactor >= 50) {
+    scaleFactor -= 25;
   }
-  if (min > max) {
-    [min, max] = [max, min];
-    //max = [min, max = min][0];
+  document.querySelector('.scale__control--value').value=scaleFactor + '%';
+  document.getElementById('ImageSelected').style='transform: scale(' + scaleFactor/100 + ')' ;
+}
+
+function increaseScaleBy25() {
+  if (scaleFactor <= 75){
+    scaleFactor += 25;
   }
-  return Math.floor(Math.random() * (max - min + 1) + min);
+  document.querySelector('.scale__control--value').value=scaleFactor + '%';
+  document.getElementById('ImageSelected').style='transform: scale(' + scaleFactor/100 + ')' ;
 }
-
-const message =['Всё отлично!', 'В целом всё неплохо.', 'Но не всё.',
-  'Когда вы делаете фотографию, хорошо бы убирать палец из кадра.',
-  'В конце концов это просто непрофессионально.',
-  'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.',
-  'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
-  'Лица у людей на фотке перекошены, как будто их избивают.', 'Как можно было поймать такой неудачный момент?!'];
-
-const authors= ['Lilia', 'Patrick', 'Vivi', 'Olga', 'Daniel'];
-
-
-function randomComment(idx){
-  const comment = {
-    id: idx,
-    avatar: 'img/avatar-' + randomIntFromInterval(1, 6)  +  '.svg',
-    message: message[randomIntFromInterval(0, message.length-1)],
-    name: authors[randomIntFromInterval(0, authors.length-1)],
-  };
-  return comment;
-}
-
-
-for(let idx = 1; idx <= 25; idx++){
-  const image = {
-    id: idx,
-    url: `photos/${idx}.jpg`
-    description: 'Lovely lake',
-    likes: randomIntFromInterval(15, 200),
-    comments: [randomComment(2*idx),randomComment(2*idx +1) ],
-    name: authors[randomIntFromInterval(0, authors.length-1)],
-  };
-  images.push(image);
-}
-//console.log(images);
