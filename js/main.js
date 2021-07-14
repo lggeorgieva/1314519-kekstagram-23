@@ -14,6 +14,18 @@ function loadImage() {
   overlay.classList.remove('hidden');
   //overlay.classList.add('modal-open');
   document.body.classList.add('modal-open');
+  const preview = document.querySelectorAll('.effects__preview');
+  document.body.style.backgroundImage = "url('img/' + file.name)";
+  //preview.style.backgroundImage= "url('img/' + file.name + ')";
+
+  let previews = document.querySelectorAll('.effects__preview');
+  for (p of previews) {
+    p.style.backgroundImage = 'url(img/' + file.name + ')';
+  }
+  //preview.style.backgroundImage= "img/logo-background-3.jpg";
+  //alert(preview[0]);
+
+
   //const reader = new FileReader();
 
   //reader.addEventListener("load", function () {
@@ -24,6 +36,10 @@ function loadImage() {
   //if (file) {
   //  reader.readAsDataURL(file);
 //  }
+
+//var img = document.getElementById('your_div_id'),
+//style = img.currentStyle || window.getComputedStyle(img, false),
+//bi = style.backgroundImage.slice(4, -1).replace(/"/g, "");
 }
 
 
