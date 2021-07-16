@@ -50,8 +50,8 @@ function increaseScaleBy25() {
 }
 
 
-function setEffect(effect) {
-  document.getElementById('ImageSelected').classList=[effect];
+function setEffect(id) {
+  document.getElementById('ImageSelected').classList=['effects__preview--' + id.value];
 }
 
 
