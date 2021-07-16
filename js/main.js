@@ -2,7 +2,6 @@
 let scaleFactor = 100;  // global variable recording current scale factor
 let effect = 'none';
 const sliderElement = document.querySelector('.effect-level__slider');
-
 function loadImage() {
   // get selected image file
   const file = document.querySelector('input[type=file]').files[0];
@@ -103,8 +102,49 @@ sliderElement.noUiSlider.on('update', (values, handle) => {
       default:
     }
 
-    
-    //console.log(values[handle]);
+var uploadOverlay = uploadForm.querySelector('.upload-overlay');
+var hashtagsField = uploadOverlay.querySelector('.upload-form-hashtags');
+var uploadForm = document.querySelector('#upload-select-image');
+var uploadFile = uploadForm.querySelector('#upload-file');
+
+
+    function onHashtagsFieldInvalid() {
+        //Remove spaces
+        var fieldValue = (hashtagsField.value || '').trim().replace(/\s{2,}/g, ' ');
+        hashtagsField.value = fieldValue;
+
+        // Validity Check
+        if (fieldValue) {
+          var hashtagsArray = fieldValue.split(' ');
+
+          if (hashtagsArray.length > 5) {
+            hashtagsField.setCustomValidity('No more than five');
+          } else {
+            var message = null;
+
+            for (var i = 0; i < hashtagsArray.length && customValidityMessage === null; i++) {
+              if (!(hashtagsArray[i].startsWith('#'))) {
+                message = 'Start with the right symbol';
+              } else if (hashtagsArray[i].split('#').length > 2) {
+                message = 'Separate by spaces';
+              } else if (hashtagsArray.indexOf(hashtagsArray[i]) !== i) {
+                message = 'Use only once';
+              } else if (hashtagsArray[i].length > 21) {
+                message = 'Max length 20';
+              }
+            }
+
+            //Indicate the error by undelining
+            if (message) {
+              hashtagsField.style.outline = '2px solid red';
+              hashtagsField.setCustomValidity(message);
+            } else {
+              onHashtagsFieldValid();
+            }
+          }
+        }
+      }
+
 });
 
 /*
@@ -126,3 +166,4 @@ nextButton.addEventListener('click', () => {
   });
   nextButton.remove();
 });*/
+  //console.log(values[handle]);
