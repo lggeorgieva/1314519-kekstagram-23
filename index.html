@@ -97,7 +97,8 @@
                       </label>
                     </li>
                     <li class="effects__item">
-                      <input type="radio" class="effects__radio  visually-hidden" name="effect" id="effect-phobos" value="phobos">
+                      <input type="radio" class="effects__radio  visually-hidden" name="effect" id="effect-phobos" value="phobos"
+                      onclick="setEffect('effects__preview--phobos')">
                       <label for="effect-phobos" class="effects__label">
                         <span class="effects__preview  effects__preview--phobos">Превью эффекта Фобос</span>
                         Фобос
@@ -106,7 +107,7 @@
                     <li class="effects__item">
                       <input type="radio" class="effects__radio  visually-hidden" name="effect" id="effect-heat" value="heat">
                       <label for="effect-heat" class="effects__label">
-                        <span class="effects__preview  effects__preview--heat">Превью эффекта Зной</span>
+                        <span class="effects__preview  effects__preview--heat" onclick="setEffect('effects__preview--heat')">Превью эффекта Зной</span>
                         Зной
                       </label>
                     </li>
