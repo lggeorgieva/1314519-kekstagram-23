@@ -1,9 +1,14 @@
-let scaleFactor = 100;  // global variable recording current scale factor
 
+let scaleFactor = 100;  // global variable recording current scale factor
+let effect = 'none';
+const sliderElement = document.querySelector('.effect-level__slider');
 
 function loadImage() {
   // get selected image file
   const file = document.querySelector('input[type=file]').files[0];
+
+  //reset the effect to none
+  effect = 'none';
 
   // reset scale factor to 100%
   scaleFactor = 100;
@@ -14,7 +19,7 @@ function loadImage() {
   img.src = 'photos/' + file.name;
   img.style.transform = 'scale(' + scaleFactor/100 + ')';
   img.classList = [];
-
+  img.style.filter = null;
   // populate image to effects previews
   let previews = document.querySelectorAll('.effects__preview');
   for (p of previews) {
@@ -51,9 +56,56 @@ function increaseScaleBy25() {
 
 
 function setEffect(id) {
-  document.getElementById('ImageSelected').classList=['effects__preview--' + id.value];
-}
+  effect =id.value;
+  if(effect === 'none'){
+    sliderElement.classList.add('hidden');
+  }
+  else{
+    sliderElement.classList.remove('hidden');
+  }
+  let image = document.getElementById('ImageSelected');
+  image.style.filter=null;
+  image.classList=['effects__preview--' + effect];
 
+  }
+
+
+
+
+noUiSlider.create(sliderElement, {
+    range: {
+        min: 0,
+        max: 100,
+    },
+    start: 80,
+});
+
+
+
+sliderElement.noUiSlider.on('update', (values, handle) => {
+    let image = document.getElementById('ImageSelected');
+    let x = values[handle];
+
+    document.querySelector('.effect-level__value').value =values[handle];
+    switch(effect){
+      case 'chrome':
+      image.style.filter = 'grayscale(' + x/100 + ')';
+      break;
+      case 'sepia':
+      image.style.filter = 'sepia(' + x / 100 + ')';
+      break;
+      case 'marvin':
+      image.style.filter = 'invert(' + x + '%)';
+      case 'phobos':
+      image.style.filter = 'blur(' + x / 300 + 'px)';
+      case 'heat':
+      image.style.filter = 'brightness(' + x / 100*3 + ')';
+      default:
+    }
+
+    
+    //console.log(values[handle]);
+});
 
 /*
 const button = document.querySelector('.click-button');
