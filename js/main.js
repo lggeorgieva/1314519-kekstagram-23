@@ -16,37 +16,36 @@ let effect = 'none';    // current effect
 noUiSlider.create(sliderElt, { range:{ min:0, max:100 }, start:100 });
 
 function showSlider() {
-  sliderElt.classList.add('hidden');
+  sliderElt.classList.remove('hidden');
   // TODO: reset slider value to 100
 }
 
 function hideSlider() {
-  sliderElt.classList.remove('hidden');
+  sliderElt.classList.add('hidden');
 }
 
 
 // loadImage() is called when an image is selected
 function loadImage() {
-  // get selected image file
+  // get selected image file and display image
   const file = document.querySelector('input[type=file]').files[0];
-
-  //reset the effect to none
-  effect = 'none';
-
-  // reset scale factor to 100%
-  scaleFactor = 100;
-  scaleControlValueElt.value = scaleFactor + '%';
-
-  // display image at 100% scale and with no effects
   uploadPreviewImgElt.src = 'photos/' + file.name;
-  uploadPreviewImgElt.style.transform = 'scale(' + scaleFactor/100 + ')';
-  uploadPreviewImgElt.classList = [];
-  uploadPreviewImgElt.style.filter = null;
 
   // populate image to effects previews
   for (let p of effectsPreviewElts) {
     p.style.backgroundImage = 'url(photos/' + file.name + ')';
   }
+
+  // reset scale factor to 100%
+  scaleFactor = 100;
+  scaleControlValueElt.value = scaleFactor + '%';
+  uploadPreviewImgElt.style.transform = 'scale(' + scaleFactor/100 + ')';
+
+  // reset the effect to none
+  effect = 'none';
+  uploadPreviewImgElt.classList = [];
+  uploadPreviewImgElt.style.filter = null;
+  hideSlider();
 
   // show overlay
   overlayElt.classList.remove('hidden');
@@ -78,17 +77,13 @@ function increaseScaleBy25() {
 }
 
 
-// setEffect() is called when a preview effect radio button is clicked
-function setEffect(id) {
-  effect =id.value;
-  if(effect === 'none'){
-    sliderElt.classList.add('hidden');
-  }
-  else{
-    sliderElt.classList.remove('hidden');
-  }
-  uploadPreviewImgElt.style.filter=null;
-  uploadPreviewImgElt.classList=['effects__preview--' + effect];
+// setEffect() is called when an effect radio button is clicked;
+// elt is the DOM element that was clicked
+function setEffect(elt) {
+  effect = elt.value;
+  if (effect === 'none') { hideSlider(); } else { showSlider(); }
+  uploadPreviewImgElt.style.filter = null;
+  uploadPreviewImgElt.classList = ['effects__preview--' + effect];
 }
 
 
