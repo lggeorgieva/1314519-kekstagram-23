@@ -137,7 +137,7 @@ function onHashtagsFieldInvalid() {
         hashtagsField.style.outline = '2px solid red';
         hashtagsField.setCustomValidity(message);
       } else {
-        onHashtagsFieldValid();
+        onHashtagsFieldValid();  // no such function exists! Yet!
       }
     }
   }
