@@ -7,7 +7,7 @@ const effectsPreviewElts = document.querySelectorAll('.effects__preview');
 const effectLevelValueElt = document.querySelector('.effect-level__value');
 
 
-// Mutable global variables 
+// Mutable global variables
 let scaleFactor = 100;  // current scale factor (in percent)
 let effect = 'none';    // current effect
 
@@ -99,9 +99,9 @@ sliderElt.noUiSlider.on('update', (values, handle) => {
     case 'marvin':
       uploadPreviewImgElt.style.filter = 'invert(' + x + '%)'; break;
     case 'phobos':
-      uploadPreviewImgElt.style.filter = 'blur(' + x/300 + 'px)'; break; // doesn't work
+      uploadPreviewImgElt.style.filter = 'blur(' + x / 100 * 3 + 'px)'; break; // works
     case 'heat':
-      uploadPreviewImgElt.style.filter = 'brightness(' + x/100*3 + ')'; break; // range might not be correct
+      uploadPreviewImgElt.style.filter = 'brightness(' + x / 100 * 3 + ')'; break; // correct
     default:
   }
 });
