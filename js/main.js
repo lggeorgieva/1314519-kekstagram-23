@@ -145,15 +145,11 @@ function onHashtagsFieldInvalid() {
         message = 'Max length of each hashtag 20 characters'; break;
       }
       if (hashtagsArray[i].length === 1) {
-        message='Hashtags must have more than one character.';
+        message='Hashtags must have more than one character'; break;
       }
-
-      if (hashtagsArray[i].search(/[^А-Zа-z#_\d]/i) !== -1  )
-      {
-        message ='Hashtags consist of letters and numbers only';
+      if (hashtagsArray[i].search(/[^A-Za-z#_\d]/i) !== -1) {
+        message = 'Hashtags consist of letters and numbers only'; break;
       }
-      // TODO: Check that hashtags have >= 1 characters (excl or incl #?)
-      // TODO: Check that hashtags only consist of letters and numbers
     }
   }
 
