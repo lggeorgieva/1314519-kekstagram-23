@@ -100,10 +100,10 @@ sliderElement.noUiSlider.on('update', (values, handle) => {
 });
 
 
-var uploadOverlay = uploadForm.querySelector('.upload-overlay');
-var hashtagsField = uploadOverlay.querySelector('.upload-form-hashtags');
-var uploadForm = document.querySelector('#upload-select-image');
-var uploadFile = uploadForm.querySelector('#upload-file');
+const uploadOverlay = uploadForm.querySelector('.upload-overlay');
+const hashtagsField = uploadOverlay.querySelector('.upload-form-hashtags');
+const uploadForm = document.querySelector('#upload-select-image');
+const uploadFile = uploadForm.querySelector('#upload-file');
 
 
 function onHashtagsFieldInvalid() {
@@ -113,14 +113,14 @@ function onHashtagsFieldInvalid() {
 
   // Validity Check
   if (fieldValue) {
-    var hashtagsArray = fieldValue.split(' ');
+    const hashtagsArray = fieldValue.split(' ');
 
     if (hashtagsArray.length > 5) {
       hashtagsField.setCustomValidity('No more than five');
     } else {
-      var message = null;
+      let message = null;
 
-      for (var i = 0; i < hashtagsArray.length && customValidityMessage === null; i++) {
+      for (let i = 0; i < hashtagsArray.length && customValidityMessage === null; i++) {
         if (!(hashtagsArray[i].startsWith('#'))) {
           message = 'Start with the right symbol';
         } else if (hashtagsArray[i].split('#').length > 2) {
