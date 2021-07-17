@@ -20,7 +20,6 @@ noUiSlider.create(sliderElt, { range:{ min:0, max:1 }, start:1 });
 function showSlider() {
   sliderElt.classList.remove('hidden');
   sliderElt.noUiSlider.updateOptions({start:1});
-  // TODO: reset slider value to 100
 }
 
 function hideSlider() {
@@ -110,7 +109,7 @@ sliderElt.noUiSlider.on('update', (values, handle) => {
 });
 
 
-// Hashtags stuff - not yet tested
+// Hashtags stuff - not quite complete
 
 function onHashtagsFieldInvalid() {
   // Remove extra spaces and convert to lower case
