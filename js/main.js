@@ -87,12 +87,11 @@ function setEffect(elt) {
 }
 
 
-
-
+// slider updates controlling various filter effects
 sliderElt.noUiSlider.on('update', (values, handle) => {
-  let x = values[handle];
-  effectLevelValueElt.value =values[handle];
-  switch(effect){
+  const x = values[handle];
+  effectLevelValueElt.value = x;
+  switch (effect) {
     case 'chrome':
       uploadPreviewImgElt.style.filter = 'grayscale(' + x/100 + ')'; break;
     case 'sepia':
@@ -100,9 +99,9 @@ sliderElt.noUiSlider.on('update', (values, handle) => {
     case 'marvin':
       uploadPreviewImgElt.style.filter = 'invert(' + x + '%)'; break;
     case 'phobos':
-      uploadPreviewImgElt.style.filter = 'blur(' + x/300 + 'px)'; break;
+      uploadPreviewImgElt.style.filter = 'blur(' + x/300 + 'px)'; break; // doesn't work
     case 'heat':
-      uploadPreviewImgElt.style.filter = 'brightness(' + x/100*3 + ')'; break;
+      uploadPreviewImgElt.style.filter = 'brightness(' + x/100*3 + ')'; break; // range might not be correct
     default:
   }
 });
