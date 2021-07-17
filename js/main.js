@@ -118,7 +118,10 @@ function onHashtagsFieldInvalid() {
   hashtagsFieldElt.value = fieldValue;
 
   // Empty string is okay
-  if (fieldValue === '') { return true; }
+  if (fieldValue === '') {
+    hashtagsFieldElt.setCustomValidity('');
+    return true;
+  }
 
   // Split on spaces
   const hashtagsArray = fieldValue.split(' ');
