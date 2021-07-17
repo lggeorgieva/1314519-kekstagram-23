@@ -5,6 +5,8 @@ const uploadPreviewImgElt = document.getElementById('LG-PreviewImage');
 const overlayElt = document.querySelector('.img-upload__overlay');
 const effectsPreviewElts = document.querySelectorAll('.effects__preview');
 const effectLevelValueElt = document.querySelector('.effect-level__value');
+const hashtagsFieldElt = document.querySelector('.text__hashtags');
+const uploadFormElt = document.querySelector('#upload-select-image');
 
 
 // Mutable global variables
@@ -100,9 +102,9 @@ sliderElt.noUiSlider.on('update', (values, handle) => {
     case 'marvin':
       uploadPreviewImgElt.style.filter = 'invert(' + x + ')'; break;
     case 'phobos':
-      uploadPreviewImgElt.style.filter = 'blur(' + x*3 + 'px)'; break; // works
+      uploadPreviewImgElt.style.filter = 'blur(' + x*3 + 'px)'; break;
     case 'heat':
-      uploadPreviewImgElt.style.filter = 'brightness(' + (x*2+1) + ')'; break; // goes
+      uploadPreviewImgElt.style.filter = 'brightness(' + (x*2+1) + ')'; break;
     default:
   }
 });
@@ -110,50 +112,52 @@ sliderElt.noUiSlider.on('update', (values, handle) => {
 
 // Hashtags stuff - not yet tested
 
-//const uploadForm = document.querySelector('#upload-select-image');
-//const uploadOverlay = uploadForm.querySelector('.upload-overlay');
-const hashtagsFieldElt = document.querySelector('.text__hashtags');
-
-//const uploadFile = uploadForm.querySelector('#upload-file');
-
-
 function onHashtagsFieldInvalid() {
-  //Remove spaces
-
-
-  let fieldValue = (hashtagsFieldElt.value || '').trim().replace(/\s{2,}/g, ' ');
+  // Remove extra spaces and convert to lower case
+  const fieldValue = hashtagsFieldElt.value.trim().replace(/\s{2,}/g, ' ').toLowerCase();
   hashtagsFieldElt.value = fieldValue;
 
-  // Validity Check
-  alert(fieldValue);
-  if (fieldValue) {
-    const hashtagsArray = fieldValue.split(' ');
-    if (hashtagsArray.length > 5) {
-      hashtagsFieldElt.setCustomValidity('No more than five');
-    } else {
-      // Create error message (null, if there is no error)
-      let message = null;
-      for (let i = 0; i < hashtagsArray.length && message === null; i++) {
-        if (!(hashtagsArray[i].startsWith('#'))) {
-          message = 'Start the hashtag with #';
-        } else if (hashtagsArray[i].split('#').length > 2) {
-          message = 'Separate hashtags by spaces';
-        } else if (hashtagsArray.indexOf(hashtagsArray[i]) !== i) {
-          message = 'Use each hashtag only once';
-        } else if (hashtagsArray[i].length > 20) {
-          message = 'Max length of each hashtag 20';
-        }
-      }
+  // Empty string is okay
+  if (fieldValue === '') { return true; }
 
-      // Indicate the error by undelining
-      if (message) {
-        hashtagsFieldElt.style.outline = '2px solid red';
-        hashtagsFieldElt.setCustomValidity(message);
-        return false;
-      } else {
-        return true;
+  // Split on spaces
+  const hashtagsArray = fieldValue.split(' ');
+
+  // Validity check; create error message ('' if all is okay)
+  let message = '';
+  if (hashtagsArray.length > 5) {
+    message = 'No more than five hashtags';
+  }
+  else {
+    for (let i = 0; i < hashtagsArray.length; i++) {
+      if (!hashtagsArray[i].startsWith('#')) {
+        message = 'Start each hashtag with #'; break;
       }
+      if (hashtagsArray[i].split('#').length > 2) {
+        message = 'Separate hashtags by spaces'; break;
+      }
+      if (hashtagsArray.indexOf(hashtagsArray[i]) !== i) {
+        message = 'Use each hashtag only once'; break;
+      }
+      if (hashtagsArray[i].length > 20) {
+        message = 'Max length of each hashtag 20 characters'; break;
+      }
+      // TODO: Check that hashtags have >= 1 characters (excl or incl #?)
+      // TODO: Check that hashtags only consist of letters and numbers
     }
+  }
+
+  // Show error message ('' shows nothing and submits)
+  hashtagsFieldElt.setCustomValidity(message);
+
+  // Return true or false
+  if (message === '') {
+    return true;
+  }
+  else {
+    // Highlight form in red to indicate error
+    hashtagsFieldElt.style.outline = '2px solid red';
+    return message === '';
   }
 }
 
