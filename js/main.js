@@ -144,6 +144,14 @@ function onHashtagsFieldInvalid() {
       if (hashtagsArray[i].length > 20) {
         message = 'Max length of each hashtag 20 characters'; break;
       }
+      if (hashtagsArray[i].length === 1) {
+        message='Hashtags must have more than one character.';
+      }
+
+      if (hashtagsArray[i].search(/[^А-Zа-z#_\d]/i) !== -1  )
+      {
+        message ='Hashtags consist of letters and numbers only';
+      }
       // TODO: Check that hashtags have >= 1 characters (excl or incl #?)
       // TODO: Check that hashtags only consist of letters and numbers
     }
@@ -164,6 +172,78 @@ function onHashtagsFieldInvalid() {
 }
 
 
+/*let SERVER_URL = 'https://1510.dump.academy/kekstagram';
+let SERVER_URL = 'https://js.dump.academy/kekstagram';
+
+function setup(onLoad, onError) {
+    let xhr = new XMLHttpRequest();
+
+
+function showGallery() {
+  let photosList = document.querySelector('.pictures');
+  let galleryOverlay = document.querySelector('.gallery-overlay');
+  let galleryOverlayClose = galleryOverlay.querySelector('.gallery-overlay-close');
+
+
+}
+
+ // close the gallery by pressing esc
+
+
+/*  function onGalleryOverlayEscPress(evt) {
+    window.util.isEscEvent(evt, onGalleryOverlayClose);
+  }
+
+  //open the gallery
+  function onGalleryOverlayOpen() {
+    galleryOverlay.classList.remove('hidden');
+    document.addEventListener('keydown', onGalleryOverlayEscPress);
+  }
+
+  // close the gallery
+  function onGalleryOverlayClose() {
+    galleryOverlay.classList.add('hidden');
+    document.removeEventListener('keydown', onGalleryOverlayEscPress);
+  }
+
+  // photo clicks during capture
+  photosList.addEventListener('click', function (evt) {
+    evt.preventDefault(); // clicking does not reload the page
+    window.preview(evt.target, galleryOverlay, onGalleryOverlayOpen);
+  });
+
+  // press enter when the photo is in focus
+  photosList.addEventListener('keydown', function (evt) {
+    window.util.isEnterEvent(evt, function () {
+      evt.preventDefault(); // so that click does not reload
+      window.preview(evt.target, galleryOverlay, onGalleryOverlayOpen);
+    });
+  };
+
+  // Handler on pressing ENTER when the cross in the gallery is in focus
+  galleryOverlayClose.addEventListener('click', onGalleryOverlayClose);
+
+
+  galleryOverlayClose.addEventListener('keydown', function (evt) {
+    window.util.isEnterEvent(evt, onGalleryOverlayClose);
+  });
+})();
+
+/*Debounce provided
+
+*(function () {
+  var DEBOUNCE_INTERVAL = 300;
+  var lastTimeout;
+
+  // Переданный callback вызывается с задержкой
+  window.debounce = function (callback) {
+    if (lastTimeout) {
+      window.clearTimeout(lastTimeout);
+    }
+
+    lastTimeout = window.setTimeout(callback, DEBOUNCE_INTERVAL);
+  };
+})();
 /*
 const button = document.querySelector('.click-button');
 const popup = document.querySelector('.content');
