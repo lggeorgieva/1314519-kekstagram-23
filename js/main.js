@@ -1,7 +1,31 @@
+// Frequently used DOM elements (names ending in Elts are a list of elements)
+const sliderElt = document.querySelector('.effect-level__slider');
+const scaleControlValueElt = document.querySelector('.scale__control--value');
+const uploadPreviewImgElt = document.getElementById('LG-PreviewImage');
+const overlayElt = document.querySelector('.img-upload__overlay');
+const effectsPreviewElts = document.querySelectorAll('.effects__preview');
+const effectLevelValueElt = document.querySelector('.effect-level__value');
 
-let scaleFactor = 100;  // global variable recording current scale factor
-let effect = 'none';
-const sliderElement = document.querySelector('.effect-level__slider');
+
+// Mutable global variables 
+let scaleFactor = 100;  // current scale factor (in percent)
+let effect = 'none';    // current effect
+
+
+// Creating the slider and some slider utility functions
+noUiSlider.create(sliderElt, { range:{ min:0, max:100 }, start:100 });
+
+function showSlider() {
+  sliderElt.classList.add('hidden');
+  // TODO: reset slider value to 100
+}
+
+function hideSlider() {
+  sliderElt.classList.remove('hidden');
+}
+
+
+// loadImage() is called when an image is selected
 function loadImage() {
   // get selected image file
   const file = document.querySelector('input[type=file]').files[0];
@@ -11,94 +35,85 @@ function loadImage() {
 
   // reset scale factor to 100%
   scaleFactor = 100;
-  document.querySelector('.scale__control--value').value = scaleFactor + '%';
+  scaleControlValueElt.value = scaleFactor + '%';
 
   // display image at 100% scale and with no effects
-  let img = document.getElementById('ImageSelected');
-  img.src = 'photos/' + file.name;
-  img.style.transform = 'scale(' + scaleFactor/100 + ')';
-  img.classList = [];
-  img.style.filter = null;
+  uploadPreviewImgElt.src = 'photos/' + file.name;
+  uploadPreviewImgElt.style.transform = 'scale(' + scaleFactor/100 + ')';
+  uploadPreviewImgElt.classList = [];
+  uploadPreviewImgElt.style.filter = null;
+
   // populate image to effects previews
-  let previews = document.querySelectorAll('.effects__preview');
-  for (p of previews) {
+  for (let p of effectsPreviewElts) {
     p.style.backgroundImage = 'url(photos/' + file.name + ')';
   }
 
   // show overlay
-  let overlay = document.querySelector('.img-upload__overlay');
-  overlay.classList.remove('hidden');
+  overlayElt.classList.remove('hidden');
   document.body.classList.add('modal-open');
 }
 
 
+// closeImage() is called when the image preview is closed
 function closeImage() {
   // hide overlay
   document.body.classList.remove('modal-open');
-  let overlay = document.querySelector('.img-upload__overlay');
-  overlay.classList.add('hidden');
+  overlayElt.classList.add('hidden');
 }
 
 
+// reduceScaleBy25() is called when the scale - button is clicked
 function reduceScaleBy25() {
   if (scaleFactor >= 50) { scaleFactor -= 25; }
-  document.querySelector('.scale__control--value').value = scaleFactor + '%';
-  document.getElementById('ImageSelected').style.transform = 'scale(' + scaleFactor/100 + ')' ;
+  scaleControlValueElt.value = scaleFactor + '%';
+  uploadPreviewImgElt.style.transform = 'scale(' + scaleFactor/100 + ')' ;
 }
 
 
+// increaseScaleBy25() is called when the scale + button is clicked
 function increaseScaleBy25() {
   if (scaleFactor <= 75){ scaleFactor += 25; }
-  document.querySelector('.scale__control--value').value = scaleFactor + '%';
-  document.getElementById('ImageSelected').style.transform = 'scale(' + scaleFactor/100 + ')' ;
+  scaleControlValueElt.value = scaleFactor + '%';
+  uploadPreviewImgElt.style.transform = 'scale(' + scaleFactor/100 + ')' ;
 }
 
 
+// setEffect() is called when a preview effect radio button is clicked
 function setEffect(id) {
   effect =id.value;
   if(effect === 'none'){
-    sliderElement.classList.add('hidden');
+    sliderElt.classList.add('hidden');
   }
   else{
-    sliderElement.classList.remove('hidden');
+    sliderElt.classList.remove('hidden');
   }
-  let image = document.getElementById('ImageSelected');
-  image.style.filter=null;
-  image.classList=['effects__preview--' + effect];
+  uploadPreviewImgElt.style.filter=null;
+  uploadPreviewImgElt.classList=['effects__preview--' + effect];
 }
 
 
 
 
-noUiSlider.create(sliderElement, {
-    range: {
-        min: 0,
-        max: 100,
-    },
-    start: 100,
-});
-
-
-
-sliderElement.noUiSlider.on('update', (values, handle) => {
-  let image = document.getElementById('ImageSelected');
+sliderElt.noUiSlider.on('update', (values, handle) => {
   let x = values[handle];
-  document.querySelector('.effect-level__value').value =values[handle];
+  effectLevelValueElt.value =values[handle];
   switch(effect){
     case 'chrome':
-      image.style.filter = 'grayscale(' + x/100 + ')'; break;
+      uploadPreviewImgElt.style.filter = 'grayscale(' + x/100 + ')'; break;
     case 'sepia':
-      image.style.filter = 'sepia(' + x/100 + ')'; break;
+      uploadPreviewImgElt.style.filter = 'sepia(' + x/100 + ')'; break;
     case 'marvin':
-      image.style.filter = 'invert(' + x + '%)'; break;
+      uploadPreviewImgElt.style.filter = 'invert(' + x + '%)'; break;
     case 'phobos':
-      image.style.filter = 'blur(' + x/300 + 'px)'; break;
+      uploadPreviewImgElt.style.filter = 'blur(' + x/300 + 'px)'; break;
     case 'heat':
-      image.style.filter = 'brightness(' + x/100*3 + ')'; break;
+      uploadPreviewImgElt.style.filter = 'brightness(' + x/100*3 + ')'; break;
     default:
   }
 });
 
+
+// Hashtags stuff - not yet tested
 
 const uploadOverlay = uploadForm.querySelector('.upload-overlay');
 const hashtagsField = uploadOverlay.querySelector('.upload-form-hashtags');
