@@ -65,8 +65,7 @@ function setEffect(id) {
   let image = document.getElementById('ImageSelected');
   image.style.filter=null;
   image.classList=['effects__preview--' + effect];
-
-  }
+}
 
 
 
@@ -76,31 +75,30 @@ noUiSlider.create(sliderElement, {
         min: 0,
         max: 100,
     },
-    start: 80,
+    start: 100,
 });
 
 
 
 sliderElement.noUiSlider.on('update', (values, handle) => {
-    let image = document.getElementById('ImageSelected');
-    let x = values[handle];
+  let image = document.getElementById('ImageSelected');
+  let x = values[handle];
+  document.querySelector('.effect-level__value').value =values[handle];
+  switch(effect){
+    case 'chrome':
+      image.style.filter = 'grayscale(' + x/100 + ')'; break;
+    case 'sepia':
+      image.style.filter = 'sepia(' + x/100 + ')'; break;
+    case 'marvin':
+      image.style.filter = 'invert(' + x + '%)'; break;
+    case 'phobos':
+      image.style.filter = 'blur(' + x/300 + 'px)'; break;
+    case 'heat':
+      image.style.filter = 'brightness(' + x/100*3 + ')'; break;
+    default:
+  }
+});
 
-    document.querySelector('.effect-level__value').value =values[handle];
-    switch(effect){
-      case 'chrome':
-      image.style.filter = 'grayscale(' + x/100 + ')';
-      break;
-      case 'sepia':
-      image.style.filter = 'sepia(' + x / 100 + ')';
-      break;
-      case 'marvin':
-      image.style.filter = 'invert(' + x + '%)';
-      case 'phobos':
-      image.style.filter = 'blur(' + x / 300 + 'px)';
-      case 'heat':
-      image.style.filter = 'brightness(' + x / 100*3 + ')';
-      default:
-    }
 
 var uploadOverlay = uploadForm.querySelector('.upload-overlay');
 var hashtagsField = uploadOverlay.querySelector('.upload-form-hashtags');
@@ -108,44 +106,43 @@ var uploadForm = document.querySelector('#upload-select-image');
 var uploadFile = uploadForm.querySelector('#upload-file');
 
 
-    function onHashtagsFieldInvalid() {
-        //Remove spaces
-        var fieldValue = (hashtagsField.value || '').trim().replace(/\s{2,}/g, ' ');
-        hashtagsField.value = fieldValue;
+function onHashtagsFieldInvalid() {
+  //Remove spaces
+  var fieldValue = (hashtagsField.value || '').trim().replace(/\s{2,}/g, ' ');
+  hashtagsField.value = fieldValue;
 
-        // Validity Check
-        if (fieldValue) {
-          var hashtagsArray = fieldValue.split(' ');
+  // Validity Check
+  if (fieldValue) {
+    var hashtagsArray = fieldValue.split(' ');
 
-          if (hashtagsArray.length > 5) {
-            hashtagsField.setCustomValidity('No more than five');
-          } else {
-            var message = null;
+    if (hashtagsArray.length > 5) {
+      hashtagsField.setCustomValidity('No more than five');
+    } else {
+      var message = null;
 
-            for (var i = 0; i < hashtagsArray.length && customValidityMessage === null; i++) {
-              if (!(hashtagsArray[i].startsWith('#'))) {
-                message = 'Start with the right symbol';
-              } else if (hashtagsArray[i].split('#').length > 2) {
-                message = 'Separate by spaces';
-              } else if (hashtagsArray.indexOf(hashtagsArray[i]) !== i) {
-                message = 'Use only once';
-              } else if (hashtagsArray[i].length > 21) {
-                message = 'Max length 20';
-              }
-            }
-
-            //Indicate the error by undelining
-            if (message) {
-              hashtagsField.style.outline = '2px solid red';
-              hashtagsField.setCustomValidity(message);
-            } else {
-              onHashtagsFieldValid();
-            }
-          }
+      for (var i = 0; i < hashtagsArray.length && customValidityMessage === null; i++) {
+        if (!(hashtagsArray[i].startsWith('#'))) {
+          message = 'Start with the right symbol';
+        } else if (hashtagsArray[i].split('#').length > 2) {
+          message = 'Separate by spaces';
+        } else if (hashtagsArray.indexOf(hashtagsArray[i]) !== i) {
+          message = 'Use only once';
+        } else if (hashtagsArray[i].length > 21) {
+          message = 'Max length 20';
         }
       }
 
-});
+      //Indicate the error by undelining
+      if (message) {
+        hashtagsField.style.outline = '2px solid red';
+        hashtagsField.setCustomValidity(message);
+      } else {
+        onHashtagsFieldValid();
+      }
+    }
+  }
+}
+
 
 /*
 const button = document.querySelector('.click-button');
