@@ -118,9 +118,9 @@ function onHashtagsFieldInvalid() {
     if (hashtagsArray.length > 5) {
       hashtagsField.setCustomValidity('No more than five');
     } else {
+      // Create error message (null, if there is no error)
       let message = null;
-
-      for (let i = 0; i < hashtagsArray.length && customValidityMessage === null; i++) {
+      for (let i = 0; i < hashtagsArray.length && message === null; i++) {
         if (!(hashtagsArray[i].startsWith('#'))) {
           message = 'Start with the right symbol';
         } else if (hashtagsArray[i].split('#').length > 2) {
@@ -132,7 +132,7 @@ function onHashtagsFieldInvalid() {
         }
       }
 
-      //Indicate the error by undelining
+      // Indicate the error by undelining
       if (message) {
         hashtagsField.style.outline = '2px solid red';
         hashtagsField.setCustomValidity(message);
