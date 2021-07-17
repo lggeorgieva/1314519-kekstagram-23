@@ -13,10 +13,11 @@ let effect = 'none';    // current effect
 
 
 // Creating the slider and some slider utility functions
-noUiSlider.create(sliderElt, { range:{ min:0, max:100 }, start:100 });
+noUiSlider.create(sliderElt, { range:{ min:0, max:1 }, start:1 });
 
 function showSlider() {
   sliderElt.classList.remove('hidden');
+  sliderElt.noUiSlider.updateOptions({start:1});
   // TODO: reset slider value to 100
 }
 
@@ -93,15 +94,15 @@ sliderElt.noUiSlider.on('update', (values, handle) => {
   effectLevelValueElt.value = x;
   switch (effect) {
     case 'chrome':
-      uploadPreviewImgElt.style.filter = 'grayscale(' + x/100 + ')'; break;
+      uploadPreviewImgElt.style.filter = 'grayscale(' + x + ')'; break;
     case 'sepia':
-      uploadPreviewImgElt.style.filter = 'sepia(' + x/100 + ')'; break;
+      uploadPreviewImgElt.style.filter = 'sepia(' + x + ')'; break;
     case 'marvin':
-      uploadPreviewImgElt.style.filter = 'invert(' + x + '%)'; break;
+      uploadPreviewImgElt.style.filter = 'invert(' + x + ')'; break;
     case 'phobos':
-      uploadPreviewImgElt.style.filter = 'blur(' + x / 100 * 3 + 'px)'; break; // works
+      uploadPreviewImgElt.style.filter = 'blur(' + x*3 + 'px)'; break; // works
     case 'heat':
-      uploadPreviewImgElt.style.filter = 'brightness(' + x / 100 * 3 + ')'; break; // correct
+      uploadPreviewImgElt.style.filter = 'brightness(' + (x*2+1) + ')'; break; // goes
     default:
   }
 });
@@ -109,44 +110,48 @@ sliderElt.noUiSlider.on('update', (values, handle) => {
 
 // Hashtags stuff - not yet tested
 
-const uploadOverlay = uploadForm.querySelector('.upload-overlay');
-const hashtagsField = uploadOverlay.querySelector('.upload-form-hashtags');
-const uploadForm = document.querySelector('#upload-select-image');
-const uploadFile = uploadForm.querySelector('#upload-file');
+//const uploadForm = document.querySelector('#upload-select-image');
+//const uploadOverlay = uploadForm.querySelector('.upload-overlay');
+const hashtagsFieldElt = document.querySelector('.text__hashtags');
+
+//const uploadFile = uploadForm.querySelector('#upload-file');
 
 
 function onHashtagsFieldInvalid() {
   //Remove spaces
-  var fieldValue = (hashtagsField.value || '').trim().replace(/\s{2,}/g, ' ');
-  hashtagsField.value = fieldValue;
+
+
+  let fieldValue = (hashtagsFieldElt.value || '').trim().replace(/\s{2,}/g, ' ');
+  hashtagsFieldElt.value = fieldValue;
 
   // Validity Check
+  alert(fieldValue);
   if (fieldValue) {
     const hashtagsArray = fieldValue.split(' ');
-
     if (hashtagsArray.length > 5) {
-      hashtagsField.setCustomValidity('No more than five');
+      hashtagsFieldElt.setCustomValidity('No more than five');
     } else {
       // Create error message (null, if there is no error)
       let message = null;
       for (let i = 0; i < hashtagsArray.length && message === null; i++) {
         if (!(hashtagsArray[i].startsWith('#'))) {
-          message = 'Start with the right symbol';
+          message = 'Start the hashtag with #';
         } else if (hashtagsArray[i].split('#').length > 2) {
-          message = 'Separate by spaces';
+          message = 'Separate hashtags by spaces';
         } else if (hashtagsArray.indexOf(hashtagsArray[i]) !== i) {
-          message = 'Use only once';
-        } else if (hashtagsArray[i].length > 21) {
-          message = 'Max length 20';
+          message = 'Use each hashtag only once';
+        } else if (hashtagsArray[i].length > 20) {
+          message = 'Max length of each hashtag 20';
         }
       }
 
       // Indicate the error by undelining
       if (message) {
-        hashtagsField.style.outline = '2px solid red';
-        hashtagsField.setCustomValidity(message);
+        hashtagsFieldElt.style.outline = '2px solid red';
+        hashtagsFieldElt.setCustomValidity(message);
+        return false;
       } else {
-        onHashtagsFieldValid();  // no such function exists! Yet!
+        return true;
       }
     }
   }
