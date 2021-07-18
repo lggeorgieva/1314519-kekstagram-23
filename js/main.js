@@ -181,6 +181,7 @@ const UPLOAD_URL = 'https://23.javascript.pages.academy/kekstagram';
 const LOAD_URL = 'https://23.javascript.pages.academy/kekstagram/data';
 const SERVER_TIME = 10000;
 
+
 // success/unsuccess request handling ---------------------------------------
 
 let xhr = new XMLHttpRequest();
@@ -211,27 +212,20 @@ xhr.addEventListener('timeout', function () {
 });
 
 
-function testPost() {
-  alert("before");
-fetch(
-  LOAD_URL,
-  {
-    method: 'GET',
-    credentials: 'same-origin',
-    //body: new FormData(),
-  },
-)
+/* async */ function testPost() {
+  fetch(LOAD_URL,
+        { method: 'GET',
+          credentials: 'same-origin'
+        })
   .then((response) => {
-    console.log(response.status);
-    console.log(response.ok);
-    alert(response.status);
+    console.log(response.status + ' ' + response.ok);
     return response.json();
   })
   .then((json) => {
-    //console.log('Result', json);
-    alert(json);
-  });
-  alert("after");
+    console.log(json);
+  })
+  .catch((err) => { console.log(err) });
+  alert('After exec testPost()');
 }
 
 
