@@ -233,6 +233,131 @@ xhr.addEventListener('timeout', function () {
   //alert('After exec testPost()');
 }
 
+
+let ALL_PHOTOS = 25;
+  let commentsArray = [];
+  let photos = [];
+  let comments = [
+    'Всё отлично!',
+    'В целом всё неплохо. Но не всё.',
+    'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
+    'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.',
+    'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
+    'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
+  ];
+  let description = [
+    'Тестим новую камеру!',
+    'Затусили с друзьями на море',
+    'Как же круто тут кормят',
+    'Отдыхаем...',
+    'Цените каждое мгновенье. Цените тех, кто рядом с вами и отгоняйте все сомненья. Не обижайте всех словами......',
+    'Вот это тачка!'
+  ];
+  let pictureTemplate = document.querySelector('#picture').content.querySelector('a');
+  let pictureBlock = document.querySelector('.pictures');
+  let fragment = document.createDocumentFragment();
+  let commentTemplate = document.querySelector('#picture__comments').content.querySelector('*');
+  let commentBlock = document.querySelector('.social__comments');
+
+  // Random integer between min and max
+  function randInt(min, max) {
+    var like = Math.floor(Math.random() * (max - min + 1)) + min;
+    return like;
+  };
+
+
+  function genComents() {
+    if (randInt(1, 2) === 2) {
+      commentsArray = [
+        comments[randInt(0, comments.length - 1)],
+        comments[randInt(0, comments.length - 1)]
+      ]
+    } else {
+      commentsArray = [
+        comments[randInt(0, comments.length - 1)]
+      ]
+    }
+    return commentsArray;
+  }
+
+  //Generate All photos
+
+  function generatePhotos() {
+    for (var i = 1; i <= ALL_PHOTOS; i++) {
+      photos[i - 1] = {
+        url: 'photos/' + i + '.jpg',
+        likes: randInt(15, 200),
+        comments: genComents(),
+        description: description[randInt(0, description.length - 1)]
+      }
+    }
+    return photos;
+  }
+  generatePhotos();
+
+  function createPhotoElements() {
+
+    for (var i = 0; i < photos.length; i++) {
+      var newPhoto = pictureTemplate.cloneNode(true);
+      newPhoto.querySelector('img').src = photos[i].url;
+      newPhoto.querySelector('.picture__comments').textContent = photos[i].comments.length;
+      newPhoto.querySelector('.picture__likes').textContent = photos[i].likes;
+      fragment.appendChild(newPhoto);
+
+    }
+    pictureBlock.appendChild(fragment);
+  };
+  createPhotoElements();
+
+  // The big photo
+
+  var bigPicture = document.querySelector('.big-picture');
+
+  function getBigPhoto(nu) {
+    bigPicture.querySelector('.big-picture__img img').src = photos[nu].url;
+    bigPicture.querySelector('.likes-count').textContent = photos[nu].likes;
+    bigPicture.querySelector('.comments-count').textContent = photos[nu].comments.length;
+    bigPicture.querySelector('.social__caption').textContent = photos[nu].description;
+    commentBlock.appendChild(fragment);
+  }
+
+  function setNewComment(nu) {
+    for (var i = 0; i < photos[nu].comments.length; i++) {
+      var newComment = commentTemplate.cloneNode(true);
+      newComment.querySelector('img').src = 'img/avatar-' + randInt(1, 6) + '.svg';
+      newComment.querySelector('.social__text').textContent = photos[nu].comments[i];
+      fragment.appendChild(newComment);
+    }
+  }
+
+  setNewComment(11);
+  getBigPhoto(11);
+
+  //Open the big image by clicking at the small one.
+  var miniPhotos = document.querySelectorAll('.picture');
+
+
+  for (var i = 0; i < photos.length; i++) {
+    miniPhotos[i].addEventListener('click', function (evt) {
+      bigPicture.classList.remove('hidden');
+      bigPicture.querySelector('img').src = evt.target.src;
+
+    })
+  }
+
+  //Close the big image.
+
+  let closeBigPhoto = document.querySelector('#picture-cancel');
+
+  closeBigPhoto.addEventListener('click', function () {
+    bigPicture.classList.add('hidden');
+  });
+
+
+
+
+
+
 /*function load(onLoad, onError) {
   let xhr = setup(onLoad, onError);
   xhr.open('GET', LOAD_URL);
