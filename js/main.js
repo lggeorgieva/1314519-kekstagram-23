@@ -21,6 +21,7 @@ function showSlider() {
   sliderElt.classList.remove('hidden');
   sliderElt.noUiSlider.updateOptions({start:1});
 }
+
 function hideSlider() {
   sliderElt.classList.add('hidden');
 }
@@ -109,7 +110,7 @@ sliderElt.noUiSlider.on('update', (values, handle) => {
 
 
 // Hashtags stuff - not quite complete
-
+// TODO: rename function, document, possibly return list of hashtags
 function onHashtagsFieldInvalid() {
   // Remove extra spaces and convert to lower case
   const fieldValue = hashtagsFieldElt.value.trim().replace(/\s{2,}/g, ' ').toLowerCase();
@@ -166,42 +167,48 @@ function onHashtagsFieldInvalid() {
   }
 }
 
-let Code = {
-    OK: 200,
-    BAD_REQUEST: 400,
-    NOT_FOUND: 404,
-    INTERNAL_SERVER_ERROR: 500,
-  };
-  let UPLOAD_URL = 'https://23.javascript.pages.academy/kekstagram';
-  let LOAD_URL = 'https://23.javascript.pages.academy/kekstagram/data';
 
-  let SERVER_TIME = 10000;
+// --- server stuff -------------------------------------------------------
 
-  // success/unsuccess request handling ---------------------------------------
+const Code = {
+        OK: 200,
+        BAD_REQUEST: 400,
+        NOT_FOUND: 404,
+        INTERNAL_SERVER_ERROR: 500
+      };
+
+const UPLOAD_URL = 'https://23.javascript.pages.academy/kekstagram';
+const LOAD_URL = 'https://23.javascript.pages.academy/kekstagram/data';
+const SERVER_TIME = 10000;
+
+// success/unsuccess request handling ---------------------------------------
+
 let xhr = new XMLHttpRequest();
-  let setup = function (onLoad, onError) {
 
-    xhr.responseType = 'json';
-    xhr.addEventListener('load', function () {
-      if (xhr.status === Code.OK) {
-        onLoad(xhr.response);
-      } else if (xhr.status === Code.BAD_REQUEST) {
-        onError('Bad request: ' + xhr.status);
-      } else if (xhr.status === Code.NOT_FOUND) {
-        onError('Nothing was found: ' + xhr.status);
-      } else if (xhr.status === Code.INTERNAL_SERVER_ERROR) {
-        onError('Internal server error: ' + xhr.status);
-      }
-    });}
+let setup = function (onLoad, onError) {
+  xhr.responseType = 'json';
+  xhr.addEventListener('load', function () {
+    if (xhr.status === Code.OK) {
+      onLoad(xhr.response);
+    } else if (xhr.status === Code.BAD_REQUEST) {
+      onError('Bad request: ' + xhr.status);
+    } else if (xhr.status === Code.NOT_FOUND) {
+      onError('Nothing was found: ' + xhr.status);
+    } else if (xhr.status === Code.INTERNAL_SERVER_ERROR) {
+      onError('Internal server error: ' + xhr.status);
+    }
+  });
+}
 
-    xhr.addEventListener('error', function () {
-      onError('Error connecting');
-    });
-    xhr.addEventListener('timeout', function () {
-      onError('We were not able to carry out the request in ' + xhr.timeout + 'ms.');
-      xhr.timeout = SERVER_TIME;
-      return xhr;
-    });
+xhr.addEventListener('error', function () {
+  onError('Error connecting');
+});
+
+xhr.addEventListener('timeout', function () {
+  onError('We were not able to carry out the request in ' + xhr.timeout + 'ms.');
+  xhr.timeout = SERVER_TIME;  // TODO: Should these two lines be swapped?
+  return xhr;
+});
 
 /*
   // data load from server ----------------------------------------------------
