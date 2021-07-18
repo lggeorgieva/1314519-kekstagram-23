@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Testing fetch API</title>
+</head>
+
+<body>
+  <h1>Testing fetch API</h1>
+  <p>Calling fetch() and displaying the response in the paragraphs below.</p>
+  <!-- <button id="button" onclick="get()">Click quick to fetch()</button> -->
+  <button id="button">Click quick to fetch()</button>
+  <p id="response1"></p>
+  <p id="response2"></p>
+  <p id="response3"></p>
+  <p id="response4"></p>
+
+<script src="./testfetch.js"></script>
+<!--
+  <script>
+    const GET_URL  = 'https://23.javascript.pages.academy/kekstagram/data';
+    const POST_URL = 'https://23.javascript.pages.academy/kekstagram';
+    const buttonElt = document.getElementById('button');
+    const response1Elt = document.getElementById('response1');
+    const response2Elt = document.getElementById('response2');
+    const response3Elt = document.getElementById('response3');
+    const response4Elt = document.getElementById('response4');
+
+    function get() {
+      fetch(GET_URL)
+      //fetch(POST_URL)
+      .then(x => {
+        console.log(x.status);
+        //response1Elt.innerHTML = x.status;
+        return x;
+      })
+      .then(x => {
+        console.log(x.ok);
+        //response2Elt.innerHTML = x.ok;
+        return x.json();
+      })
+      .then(x => {
+        console.log(x);
+        //response3Elt.innerHTML = x;
+        return JSON.stringify(x);
+      })
+      .then(x => {
+        console.log(x);
+        //response4Elt.innerHTML = x;
+      })
+      .catch(e => {
+        console.log(e);
+      });
+    }
+
+    //setTimeout(get, 3000);
+    buttonElt.addEventListener('click', get);
+  </script>
+-->
+</body>
+</html>
