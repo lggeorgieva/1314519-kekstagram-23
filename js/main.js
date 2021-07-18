@@ -228,7 +228,97 @@ xhr.addEventListener('timeout', function () {
   alert('After exec testPost()');
 }
 
+function load(onLoad, onError) {
+  let xhr = setup(onLoad, onError);
+  xhr.open('GET', LOAD_URL);
+  xhr.send();
+};
 
+function upload(data, onLoad, onError) {
+  let xhr = setup(onLoad, onError);
+  xhr.open('POST', UPLOAD_URL);
+  xhr.send(data);
+};
+
+window.backend = {
+  load: load,
+  upload: upload
+};
+
+
+let COMMENTS_COUNT_STEP = 5;
+let socialComments = document.querySelector('.social__comments');
+let loader = document.querySelector('.comments-loader');
+let counter = {
+  amount: 0};
+
+  function commentsCounter() {
+    this.amount += COMMENTS_COUNT_STEP;
+  };
+  function resetCounter() {
+    this.amount = 0;
+    loader.classList.add('hidden');
+    loader.removeEventListener('click', onLoadMoreClick);
+  }
+
+  let renderComments = function (arr) {
+  let fragment = document.createDocumentFragment();
+  let commentsBlock = document.querySelector('.social__comments');
+  let commentTemplate = commentsBlock.querySelector('.social__comment');
+  arr.forEach(function (item) {
+    let commentElement = commentTemplate.cloneNode(true);
+    let commentAvatar = commentElement.querySelector('.social__picture');
+    commentAvatar.src = item.avatar;
+    commentAvatar.alt = item.name;
+    commentAvatar.width = '35';
+    commentAvatar.height = '35';
+    commentElement.querySelector('.social__text').textContent = item.message;
+    fragment.appendChild(commentElement);
+  });
+  return fragment;
+};
+
+
+// show number of displayed comments ----------------------------------------
+let renderCommentsCount = function (result, arr) {
+  let commentsCountBlock = document.querySelector('.social__comment-count');
+  let commentsCount = document.createElement('span');
+  commentsCount.classList.add('comments-count');
+  commentsCount.textContent = result + ' из ' + arr.length + ' комментариев';
+  commentsCountBlock.textContent = '';
+  commentsCountBlock.appendChild(commentsCount);
+};
+
+// get next comments to display with step of five comments ------------------
+let getNextComments = function (arr) {
+  let result;
+  counter.doCount();
+  renderCommentsCount(counter.amount, arr);
+  result = arr.slice((counter.amount - COMMENTS_COUNT_STEP), counter.amount);
+  if (counter.amount >= arr.length) {
+    renderCommentsCount(arr.length, arr);
+    counter.resetCount();
+  }
+  return result;
+};
+
+function showGallery() {
+  let photosList = document.querySelector('.pictures');
+  let galleryOverlay = document.querySelector('.gallery-overlay');
+  let galleryOverlayClose = galleryOverlay.querySelector('.gallery-overlay-close');
+
+
+}
+
+  function onGalleryOverlayEscPress(evt) {
+    window.util.isEscEvent(evt, onGalleryOverlayClose);
+  }
+
+  //open the gallery
+  function onGalleryOverlayOpen() {
+    galleryOverlay.classList.remove('hidden');
+    document.addEventListener('keydown', onGalleryOverlayEscPress);
+  }
 /*
   // data load from server ----------------------------------------------------
   hashtagsFieldElt load = function (onLoad, onError) {
@@ -250,9 +340,7 @@ xhr.addEventListener('timeout', function () {
   };
 
 
-  let COMMENTS_COUNT_STEP = 5;
-  let socialComments = document.querySelector('.social__comments');
-  let loader = document.querySelector('.comments-loader');
+
   let comments;
 
   // comments counter ---------------------------------------------------------
