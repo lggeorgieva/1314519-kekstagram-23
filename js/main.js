@@ -210,6 +210,31 @@ xhr.addEventListener('timeout', function () {
   return xhr;
 });
 
+
+function testPost() {
+  alert("before");
+fetch(
+  LOAD_URL,
+  {
+    method: 'GET',
+    credentials: 'same-origin',
+    //body: new FormData(),
+  },
+)
+  .then((response) => {
+    console.log(response.status);
+    console.log(response.ok);
+    alert(response.status);
+    return response.json();
+  })
+  .then((json) => {
+    //console.log('Result', json);
+    alert(json);
+  });
+  alert("after");
+}
+
+
 /*
   // data load from server ----------------------------------------------------
   hashtagsFieldElt load = function (onLoad, onError) {
