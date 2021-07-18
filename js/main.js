@@ -178,7 +178,9 @@ const Code = {
       };
 
 const UPLOAD_URL = 'https://23.javascript.pages.academy/kekstagram';
-const LOAD_URL = 'https://23.javascript.pages.academy/kekstagram/data';
+const LOAD_URL = 'https://22.javascript.pages.academy/code-and-magick';
+
+//'https://23.javascript.pages.academy/kekstagram/data';
 const SERVER_TIME = 10000;
 
 
@@ -225,10 +227,13 @@ xhr.addEventListener('timeout', function () {
     console.log(json);
   })
   .catch((err) => { console.log(err) });
-  alert('After exec testPost()');
+  for(let counter =1; counter <100000000; counter++){
+
+  };
+  //alert('After exec testPost()');
 }
 
-function load(onLoad, onError) {
+/*function load(onLoad, onError) {
   let xhr = setup(onLoad, onError);
   xhr.open('GET', LOAD_URL);
   xhr.send();
