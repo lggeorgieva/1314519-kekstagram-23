@@ -21,7 +21,6 @@ function showSlider() {
   sliderElt.classList.remove('hidden');
   sliderElt.noUiSlider.updateOptions({start:1});
 }
-
 function hideSlider() {
   sliderElt.classList.add('hidden');
 }
@@ -167,7 +166,152 @@ function onHashtagsFieldInvalid() {
   }
 }
 
+let Code = {
+    OK: 200,
+    BAD_REQUEST: 400,
+    NOT_FOUND: 404,
+    INTERNAL_SERVER_ERROR: 500,
+  };
+  let UPLOAD_URL = 'https://23.javascript.pages.academy/kekstagram';
+  let LOAD_URL = 'https://23.javascript.pages.academy/kekstagram/data';
 
+  let SERVER_TIME = 10000;
+
+  // success/unsuccess request handling ---------------------------------------
+let xhr = new XMLHttpRequest();
+  let setup = function (onLoad, onError) {
+
+    xhr.responseType = 'json';
+    xhr.addEventListener('load', function () {
+      if (xhr.status === Code.OK) {
+        onLoad(xhr.response);
+      } else if (xhr.status === Code.BAD_REQUEST) {
+        onError('Bad request: ' + xhr.status);
+      } else if (xhr.status === Code.NOT_FOUND) {
+        onError('Nothing was found: ' + xhr.status);
+      } else if (xhr.status === Code.INTERNAL_SERVER_ERROR) {
+        onError('Internal server error: ' + xhr.status);
+      }
+    });}
+
+    xhr.addEventListener('error', function () {
+      onError('Error connecting');
+    });
+    xhr.addEventListener('timeout', function () {
+      onError('We were not able to carry out the request in ' + xhr.timeout + 'ms.');
+      xhr.timeout = SERVER_TIME;
+      return xhr;
+    });
+
+/*
+  // data load from server ----------------------------------------------------
+  hashtagsFieldElt load = function (onLoad, onError) {
+    let xhr = setup(onLoad, onError);
+    xhr.open('GET', LOAD_URL);
+    xhr.send();
+  };
+/*
+  // data upload to server ----------------------------------------------------
+  let upload = function (data, onLoad, onError) {
+    let xhr = setup(onLoad, onError);
+    xhr.open('POST', UPLOAD_URL);
+    xhr.send(data);
+  };
+
+  window.backend = {
+    load: load,
+    upload: upload
+  };
+
+
+  let COMMENTS_COUNT_STEP = 5;
+  let socialComments = document.querySelector('.social__comments');
+  let loader = document.querySelector('.comments-loader');
+  let comments;
+
+  // comments counter ---------------------------------------------------------
+  let counter = {
+    amount: 0,
+    doCount: function () {
+      this.amount += COMMENTS_COUNT_STEP;
+    },
+    resetCount: function () {
+      this.amount = 0;
+      loader.classList.add('hidden');
+      loader.removeEventListener('click', onLoadMoreClick);
+    }
+  };
+
+  // add cooments to popup with big photo --------------------------------------
+    let renderComments = function (arr) {
+    let fragment = document.createDocumentFragment();
+    let commentsBlock = document.querySelector('.social__comments');
+    let commentTemplate = commentsBlock.querySelector('.social__comment');
+    arr.forEach(function (item) {
+      let commentElement = commentTemplate.cloneNode(true);
+      let commentAvatar = commentElement.querySelector('.social__picture');
+      commentAvatar.src = item.avatar;
+      commentAvatar.alt = item.name;
+      commentAvatar.width = '35';
+      commentAvatar.height = '35';
+      commentElement.querySelector('.social__text').textContent = item.message;
+      fragment.appendChild(commentElement);
+    });
+    return fragment;
+  };
+
+  // show number of displayed comments ----------------------------------------
+  let renderCommentsCount = function (result, arr) {
+    let commentsCountBlock = document.querySelector('.social__comment-count');
+    let commentsCount = document.createElement('span');
+    commentsCount.classList.add('comments-count');
+    commentsCount.textContent = result + ' из ' + arr.length + ' комментариев';
+    commentsCountBlock.textContent = '';
+    commentsCountBlock.appendChild(commentsCount);
+  };
+
+  // get next comments to display with step of five comments ------------------
+  let getNextComments = function (arr) {
+    let result;
+    counter.doCount();
+    renderCommentsCount(counter.amount, arr);
+    result = arr.slice((counter.amount - COMMENTS_COUNT_STEP), counter.amount);
+    if (counter.amount >= arr.length) {
+      renderCommentsCount(arr.length, arr);
+      counter.resetCount();
+    }
+    return result;
+  };
+
+  // get first five comments to display ---------------------------------------
+  let getInitialComments = function (arr) {
+    let result;
+    comments = arr;
+    if (arr.length <= COMMENTS_COUNT_STEP) {
+      result = arr;
+      renderCommentsCount(result, arr);
+      loader.classList.add('hidden');
+    }
+    result = getNextComments(arr);
+    return result;
+  };
+
+  // adds initial number of comments ------------------------------------------
+  let initComments = function (arr) {
+    return renderComments(getInitialComments(arr));
+  };
+
+  // set listener to comment loader button ------------------------------------
+  let onLoadMoreClick = function () {
+    socComments.appendChild(renderComments(getNextComments(comments)));
+  };
+
+  window.comments = {
+    onLoadMoreClick: onLoadMoreClick,
+    init: initComments,
+    counter: counter
+  };
+}
 /*let SERVER_URL = 'https://1510.dump.academy/kekstagram';
 let SERVER_URL = 'https://js.dump.academy/kekstagram';
 
@@ -228,8 +372,8 @@ function showGallery() {
 /*Debounce provided
 
 *(function () {
-  var DEBOUNCE_INTERVAL = 300;
-  var lastTimeout;
+  let DEBOUNCE_INTERVAL = 300;
+  let lastTimeout;
 
   // Переданный callback вызывается с задержкой
   window.debounce = function (callback) {
