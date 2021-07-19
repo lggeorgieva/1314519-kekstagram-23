@@ -177,8 +177,8 @@ const Code = {
         INTERNAL_SERVER_ERROR: 500
       };
 
-const UPLOAD_URL = 'https://23.javascript.pages.academy/kekstagram';
-const LOAD_URL = 'https://22.javascript.pages.academy/code-and-magick';
+//const UPLOAD_URL = 'https://23.javascript.pages.academy/kekstagram';
+const LOAD_URL = 'https://23.javascript.pages.academy/kekstagram';
 
 //'https://23.javascript.pages.academy/kekstagram/data';
 const SERVER_TIME = 10000;
@@ -214,12 +214,14 @@ xhr.addEventListener('timeout', function () {
 });
 
 
-/* async */ function testPost() {
+ async  function testPost() {
+
   fetch(LOAD_URL,
         { method: 'GET',
           credentials: 'same-origin'
         })
-  .then((response) => {
+
+/*  .then((response) => {
     console.log(response.status + ' ' + response.ok);
     return response.json();
   })
@@ -231,8 +233,17 @@ xhr.addEventListener('timeout', function () {
 
   };
   //alert('After exec testPost()');
-}
+}*/
 
+const submitElt = document.querySelector("#upload-submit");
+submitElt.addEventListener('click', (event) => {
+   event.preventDefault();
+   fetch(LOAD_URL, { method:'GET', credentials:'same-origin' })
+   .then((response) => { console.log(response.status + ' ' +
+response.ok); return response.json(); })
+   .then((json) => { console.log(json); closeImage(); } )
+   .catch(console.log);
+});
 
 let ALL_PHOTOS = 25;
   let commentsArray = [];
