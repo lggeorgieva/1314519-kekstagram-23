@@ -177,10 +177,8 @@ const Code = {
         INTERNAL_SERVER_ERROR: 500
       };
 
-//const UPLOAD_URL = 'https://23.javascript.pages.academy/kekstagram';
-const LOAD_URL = 'https://23.javascript.pages.academy/kekstagram';
-
-//'https://23.javascript.pages.academy/kekstagram/data';
+const UPLOAD_URL = 'https://23.javascript.pages.academy/kekstagram';
+const LOAD_URL   = 'https://23.javascript.pages.academy/kekstagram/data';
 const SERVER_TIME = 10000;
 
 
@@ -213,37 +211,17 @@ xhr.addEventListener('timeout', function () {
   return xhr;
 });
 
-
- async  function testPost() {
-
-  fetch(LOAD_URL,
-        { method: 'GET',
-          credentials: 'same-origin'
-        })
-
-/*  .then((response) => {
-    console.log(response.status + ' ' + response.ok);
-    return response.json();
-  })
-  .then((json) => {
-    console.log(json);
-  })
-  .catch((err) => { console.log(err) });
-  for(let counter =1; counter <100000000; counter++){
-
-  };
-  //alert('After exec testPost()');
-}*/
-
+// Testing fetch() API when clicking submit
 const submitElt = document.querySelector("#upload-submit");
 submitElt.addEventListener('click', (event) => {
    event.preventDefault();
    fetch(LOAD_URL, { method:'GET', credentials:'same-origin' })
-   .then((response) => { console.log(response.status + ' ' +
-response.ok); return response.json(); })
+   .then((response) => { console.log(response.status + ' ' + response.ok); return response.json(); })
    .then((json) => { console.log(json); closeImage(); } )
    .catch(console.log);
 });
+
+
 
 let ALL_PHOTOS = 25;
   let commentsArray = [];
