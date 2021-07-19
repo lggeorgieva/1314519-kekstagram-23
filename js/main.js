@@ -256,7 +256,7 @@ let ALL_PHOTOS = 25;
   let pictureTemplate = document.querySelector('#picture').content.querySelector('a');
   let pictureBlock = document.querySelector('.pictures');
   let fragment = document.createDocumentFragment();
-  let commentTemplate = document.querySelector('#picture__comments').content.querySelector('*');
+  let commentTemplate = document.querySelector('#picture__comments');//.content.querySelector('li');
   let commentBlock = document.querySelector('.social__comments');
 
   // Random integer between min and max
@@ -330,7 +330,7 @@ let ALL_PHOTOS = 25;
     }
   }
 
-  setNewComment(11);
+//  setNewComment(11);
   getBigPhoto(11);
 
   //Open the big image by clicking at the small one.
