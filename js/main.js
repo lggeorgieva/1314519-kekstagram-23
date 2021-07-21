@@ -111,14 +111,14 @@ sliderElt.noUiSlider.on('update', (values, handle) => {
 
 // Hashtags stuff - not quite complete
 // TODO: rename function, document, possibly return list of hashtags
-function onHashtagsFieldInvalid() {
+function isHashtagFieldValid() {
   // Remove extra spaces and convert to lower case
+  hashtagsFieldElt.setCustomValidity('');
   const fieldValue = hashtagsFieldElt.value.trim().replace(/\s{2,}/g, ' ').toLowerCase();
   hashtagsFieldElt.value = fieldValue;
 
   // Empty string is okay
   if (fieldValue === '') {
-    hashtagsFieldElt.setCustomValidity('');
     return true;
   }
 
@@ -163,7 +163,7 @@ function onHashtagsFieldInvalid() {
   else {
     // Highlight form in red to indicate error
     hashtagsFieldElt.style.outline = '2px solid red';
-    return message === '';
+    return false;
   }
 }
 
@@ -212,14 +212,35 @@ xhr.addEventListener('timeout', function () {
 });
 
 // Testing fetch() API when clicking submit
-const submitElt = document.querySelector("#upload-submit");
-submitElt.addEventListener('click', (event) => {
+//const submitElt = document.querySelector("#upload-submit");
+//submitElt.addEventListener('click', (event) => {
+//   event.preventDefault();
+//   fetch(LOAD_URL, { method:'GET', credentials:'same-origin' })
+//   .then((response) => { console.log(response.status + ' ' + response.ok); return response.json(); })
+//   .then((json) => { console.log(json); closeImage(); } )
+//   .catch(console.log);
+//});
+
+const formSubmitElt = document.querySelector("#upload-select-image");
+formSubmitElt.addEventListener('submit', (event) => {
    event.preventDefault();
-   fetch(LOAD_URL, { method:'GET', credentials:'same-origin' })
-   .then((response) => { console.log(response.status + ' ' + response.ok); return response.json(); })
-   .then((json) => { console.log(json); closeImage(); } )
-   .catch(console.log);
-});
+   while(!isHashtagFieldValid()){}
+   fetch(UPLOAD_URL, {
+         method: 'POST',
+         credentials:'same-origin',
+         body: new FormData(formSubmitElt)})
+   .then((response) => {
+     if(!response.ok){
+       throw new Error(response.status);
+     }
+
+     const successElt = document.querySelector('#success').cloneNode(true);
+     alert(successElt);
+     document.body.insertAdjacentElement('beforeend', successElt);
+     alert('Here it is');closeImage();
+   })
+   .catch((error) => {console.log(error);});
+ });
 
 
 
