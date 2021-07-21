@@ -342,7 +342,20 @@ let ALL_PHOTOS = 25;
     bigPicture.classList.add('hidden');
   });
 
+//Form
+/*  let uploadForm = document.querySelector('.img-upload__form');
 
+      uploadForm.addEventListener('submit', function (evt) {
+
+          let data = new FormData(uploadForm);
+
+          evt.preventDefault();
+
+          function onLoad() {
+              document.querySelector('.img-upload__overlay').classList.add('hidden');
+
+          }
+}
 
 
 
