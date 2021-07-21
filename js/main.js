@@ -221,26 +221,24 @@ xhr.addEventListener('timeout', function () {
 //   .catch(console.log);
 //});
 
-const formSubmitElt = document.querySelector("#upload-select-image");
-formSubmitElt.addEventListener('submit', (event) => {
-   event.preventDefault();
-   while(!isHashtagFieldValid()){}
-   fetch(UPLOAD_URL, {
-         method: 'POST',
-         credentials:'same-origin',
-         body: new FormData(formSubmitElt)})
-   .then((response) => {
-     if(!response.ok){
-       throw new Error(response.status);
-     }
-
-     const successElt = document.querySelector('#success').cloneNode(true);
-     alert(successElt);
-     document.body.insertAdjacentElement('beforeend', successElt);
-     alert('Here it is');closeImage();
-   })
-   .catch((error) => {console.log(error);});
- });
+const submitFormElt = document.querySelector("#upload-select-image");
+const submitButtonElt = document.querySelector("#upload-submit");
+submitButtonElt.addEventListener('click', (event) => {
+  event.preventDefault();
+  if (!isHashtagFieldValid()) { return; }
+  fetch(UPLOAD_URL, { method: 'POST',
+                      credentials:'same-origin',
+                      body: new FormData(submitFormElt) })
+  .then((response) => {
+    if (!response.ok) { throw new Error(response.status); }
+    const successElt = document.querySelector('#success').cloneNode(true);
+    alert(successElt);
+    document.body.insertAdjacentElement('beforeend', successElt);
+    alert('Here it is');
+    closeImage();
+  })
+  .catch((error) => { console.log(error); });
+});
 
 
 
