@@ -223,18 +223,18 @@ xhr.addEventListener('timeout', function () {
 
 const submitFormElt = document.querySelector("#upload-select-image");
 const submitButtonElt = document.querySelector("#upload-submit");
+const successTemplateElt = document.querySelector('#success');
 submitButtonElt.addEventListener('click', (event) => {
   event.preventDefault();
   if (!isHashtagFieldValid()) { return; }
-  fetch(UPLOAD_URL, { method: 'POST',
-                      credentials:'same-origin',
-                      body: new FormData(submitFormElt) })
+  fetch(UPLOAD_URL,
+        { method: 'POST',
+          credentials: 'same-origin',
+          body: new FormData(submitFormElt) })
   .then((response) => {
     if (!response.ok) { throw new Error(response.status); }
-    const successElt = document.querySelector('#success').cloneNode(true);
-    alert(successElt);
-    document.body.insertAdjacentElement('beforeend', successElt);
-    alert('Here it is');
+    let successElt = successTemplateElt.content.cloneNode(true);
+    document.body.appendChild(successElt);
     closeImage();
   })
   .catch((error) => { console.log(error); });
