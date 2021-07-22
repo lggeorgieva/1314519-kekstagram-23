@@ -224,20 +224,32 @@ xhr.addEventListener('timeout', function () {
 const submitFormElt = document.querySelector("#upload-select-image");
 const submitButtonElt = document.querySelector("#upload-submit");
 const successTemplateElt = document.querySelector('#success');
+const errorTemplateElt= document.querySelector('#error');
 submitButtonElt.addEventListener('click', (event) => {
   event.preventDefault();
   if (!isHashtagFieldValid()) { return; }
+
+  //console.log(new FormData(submitFormElt));
+  let formData = new FormData(submitFormElt);
+  formData.set('filename', file.name);
+  for(let[name, value] of formData){alert(name + ' ' + value);}
+  alert("I work");
   fetch(UPLOAD_URL,
         { method: 'POST',
           credentials: 'same-origin',
-          body: new FormData(submitFormElt) })
+          body: formData })
   .then((response) => {
     if (!response.ok) { throw new Error(response.status); }
     let successElt = successTemplateElt.content.cloneNode(true);
     document.body.appendChild(successElt);
     closeImage();
   })
-  .catch((error) => { console.log(error); });
+  .catch((error) => {
+    let errorElt = errorTemplateElt.content.cloneNode(true);
+    errorElt.querySelector('#errormessage').innerHTML=error;
+    document.body.appendChild(errorElt);
+    closeImage();
+  });
 });
 
 
