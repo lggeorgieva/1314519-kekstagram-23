@@ -7,7 +7,7 @@ const effectsPreviewElts = document.querySelectorAll('.effects__preview');
 const effectLevelValueElt = document.querySelector('.effect-level__value');
 const hashtagsFieldElt = document.querySelector('.text__hashtags');
 const uploadFormElt = document.querySelector('#upload-select-image');
-
+const galleryFiltersButtonsElt = document.querySelector('.img-filters');
 
 // Mutable global variables
 let scaleFactor = 100;  // current scale factor (in percent)
@@ -170,56 +170,12 @@ function isHashtagFieldValid() {
 
 // --- server stuff -------------------------------------------------------
 
-const Code = {
-        OK: 200,
-        BAD_REQUEST: 400,
-        NOT_FOUND: 404,
-        INTERNAL_SERVER_ERROR: 500
-      };
+
 
 const UPLOAD_URL = 'https://23.javascript.pages.academy/kekstagram';
 const LOAD_URL   = 'https://23.javascript.pages.academy/kekstagram/data';
 const SERVER_TIME = 10000;
 
-
-// success/unsuccess request handling ---------------------------------------
-
-let xhr = new XMLHttpRequest();
-
-let setup = function (onLoad, onError) {
-  xhr.responseType = 'json';
-  xhr.addEventListener('load', function () {
-    if (xhr.status === Code.OK) {
-      onLoad(xhr.response);
-    } else if (xhr.status === Code.BAD_REQUEST) {
-      onError('Bad request: ' + xhr.status);
-    } else if (xhr.status === Code.NOT_FOUND) {
-      onError('Nothing was found: ' + xhr.status);
-    } else if (xhr.status === Code.INTERNAL_SERVER_ERROR) {
-      onError('Internal server error: ' + xhr.status);
-    }
-  });
-}
-
-xhr.addEventListener('error', function () {
-  onError('Error connecting');
-});
-
-xhr.addEventListener('timeout', function () {
-  onError('We were not able to carry out the request in ' + xhr.timeout + 'ms.');
-  xhr.timeout = SERVER_TIME;  // TODO: Should these two lines be swapped?
-  return xhr;
-});
-
-// Testing fetch() API when clicking submit
-//const submitElt = document.querySelector("#upload-submit");
-//submitElt.addEventListener('click', (event) => {
-//   event.preventDefault();
-//   fetch(LOAD_URL, { method:'GET', credentials:'same-origin' })
-//   .then((response) => { console.log(response.status + ' ' + response.ok); return response.json(); })
-//   .then((json) => { console.log(json); closeImage(); } )
-//   .catch(console.log);
-//});
 
 const submitFormElt = document.querySelector("#upload-select-image");
 const submitButtonElt = document.querySelector("#upload-submit");
@@ -254,10 +210,10 @@ submitButtonElt.addEventListener('click', (event) => {
 
 
 
-let ALL_PHOTOS = 25;
-  let commentsArray = [];
-  let photos = [];
-  let comments = [
+const ALL_PHOTOS = 25;
+let commentsArray = [];
+let photos = [];
+let comments = [
     'Всё отлично!',
     'В целом всё неплохо. Но не всё.',
     'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
@@ -302,7 +258,7 @@ let ALL_PHOTOS = 25;
 
   //Generate All photos
 
-  function generatePhotos() {
+function generatePhotos() {
     for (var i = 1; i <= ALL_PHOTOS; i++) {
       photos[i - 1] = {
         url: 'photos/' + i + '.jpg',
@@ -311,9 +267,9 @@ let ALL_PHOTOS = 25;
         description: description[randInt(0, description.length - 1)]
       }
     }
-    return photos;
+    //return photos;
   }
-  generatePhotos();
+generatePhotos();
 
   function createPhotoElements() {
 
@@ -367,317 +323,8 @@ let ALL_PHOTOS = 25;
 
   //Close the big image.
 
-  let closeBigPhoto = document.querySelector('#picture-cancel');
+let closeBigPhoto = document.querySelector('#picture-cancel');
 
-  closeBigPhoto.addEventListener('click', function () {
+closeBigPhoto.addEventListener('click', function () {
     bigPicture.classList.add('hidden');
-  });
-
-//Form
-/*  let uploadForm = document.querySelector('.img-upload__form');
-
-      uploadForm.addEventListener('submit', function (evt) {
-
-          let data = new FormData(uploadForm);
-
-          evt.preventDefault();
-
-          function onLoad() {
-              document.querySelector('.img-upload__overlay').classList.add('hidden');
-
-          }
-}
-
-
-
-
-/*function load(onLoad, onError) {
-  let xhr = setup(onLoad, onError);
-  xhr.open('GET', LOAD_URL);
-  xhr.send();
-};
-
-function upload(data, onLoad, onError) {
-  let xhr = setup(onLoad, onError);
-  xhr.open('POST', UPLOAD_URL);
-  xhr.send(data);
-};
-
-window.backend = {
-  load: load,
-  upload: upload
-};
-
-
-let COMMENTS_COUNT_STEP = 5;
-let socialComments = document.querySelector('.social__comments');
-let loader = document.querySelector('.comments-loader');
-let counter = {
-  amount: 0};
-
-  function commentsCounter() {
-    this.amount += COMMENTS_COUNT_STEP;
-  };
-  function resetCounter() {
-    this.amount = 0;
-    loader.classList.add('hidden');
-    loader.removeEventListener('click', onLoadMoreClick);
-  }
-
-  let renderComments = function (arr) {
-  let fragment = document.createDocumentFragment();
-  let commentsBlock = document.querySelector('.social__comments');
-  let commentTemplate = commentsBlock.querySelector('.social__comment');
-  arr.forEach(function (item) {
-    let commentElement = commentTemplate.cloneNode(true);
-    let commentAvatar = commentElement.querySelector('.social__picture');
-    commentAvatar.src = item.avatar;
-    commentAvatar.alt = item.name;
-    commentAvatar.width = '35';
-    commentAvatar.height = '35';
-    commentElement.querySelector('.social__text').textContent = item.message;
-    fragment.appendChild(commentElement);
-  });
-  return fragment;
-};
-
-
-// show number of displayed comments ----------------------------------------
-let renderCommentsCount = function (result, arr) {
-  let commentsCountBlock = document.querySelector('.social__comment-count');
-  let commentsCount = document.createElement('span');
-  commentsCount.classList.add('comments-count');
-  commentsCount.textContent = result + ' из ' + arr.length + ' комментариев';
-  commentsCountBlock.textContent = '';
-  commentsCountBlock.appendChild(commentsCount);
-};
-
-// get next comments to display with step of five comments ------------------
-let getNextComments = function (arr) {
-  let result;
-  counter.doCount();
-  renderCommentsCount(counter.amount, arr);
-  result = arr.slice((counter.amount - COMMENTS_COUNT_STEP), counter.amount);
-  if (counter.amount >= arr.length) {
-    renderCommentsCount(arr.length, arr);
-    counter.resetCount();
-  }
-  return result;
-};
-
-function showGallery() {
-  let photosList = document.querySelector('.pictures');
-  let galleryOverlay = document.querySelector('.gallery-overlay');
-  let galleryOverlayClose = galleryOverlay.querySelector('.gallery-overlay-close');
-
-
-}
-
-  function onGalleryOverlayEscPress(evt) {
-    window.util.isEscEvent(evt, onGalleryOverlayClose);
-  }
-
-  //open the gallery
-  function onGalleryOverlayOpen() {
-    galleryOverlay.classList.remove('hidden');
-    document.addEventListener('keydown', onGalleryOverlayEscPress);
-  }
-/*
-  // data load from server ----------------------------------------------------
-  hashtagsFieldElt load = function (onLoad, onError) {
-    let xhr = setup(onLoad, onError);
-    xhr.open('GET', LOAD_URL);
-    xhr.send();
-  };
-/*
-  // data upload to server ----------------------------------------------------
-  let upload = function (data, onLoad, onError) {
-    let xhr = setup(onLoad, onError);
-    xhr.open('POST', UPLOAD_URL);
-    xhr.send(data);
-  };
-
-  window.backend = {
-    load: load,
-    upload: upload
-  };
-
-
-
-  let comments;
-
-  // comments counter ---------------------------------------------------------
-  let counter = {
-    amount: 0,
-    doCount: function () {
-      this.amount += COMMENTS_COUNT_STEP;
-    },
-    resetCount: function () {
-      this.amount = 0;
-      loader.classList.add('hidden');
-      loader.removeEventListener('click', onLoadMoreClick);
-    }
-  };
-
-  // add cooments to popup with big photo --------------------------------------
-    let renderComments = function (arr) {
-    let fragment = document.createDocumentFragment();
-    let commentsBlock = document.querySelector('.social__comments');
-    let commentTemplate = commentsBlock.querySelector('.social__comment');
-    arr.forEach(function (item) {
-      let commentElement = commentTemplate.cloneNode(true);
-      let commentAvatar = commentElement.querySelector('.social__picture');
-      commentAvatar.src = item.avatar;
-      commentAvatar.alt = item.name;
-      commentAvatar.width = '35';
-      commentAvatar.height = '35';
-      commentElement.querySelector('.social__text').textContent = item.message;
-      fragment.appendChild(commentElement);
-    });
-    return fragment;
-  };
-
-  // show number of displayed comments ----------------------------------------
-  let renderCommentsCount = function (result, arr) {
-    let commentsCountBlock = document.querySelector('.social__comment-count');
-    let commentsCount = document.createElement('span');
-    commentsCount.classList.add('comments-count');
-    commentsCount.textContent = result + ' из ' + arr.length + ' комментариев';
-    commentsCountBlock.textContent = '';
-    commentsCountBlock.appendChild(commentsCount);
-  };
-
-  // get next comments to display with step of five comments ------------------
-  let getNextComments = function (arr) {
-    let result;
-    counter.doCount();
-    renderCommentsCount(counter.amount, arr);
-    result = arr.slice((counter.amount - COMMENTS_COUNT_STEP), counter.amount);
-    if (counter.amount >= arr.length) {
-      renderCommentsCount(arr.length, arr);
-      counter.resetCount();
-    }
-    return result;
-  };
-
-  // get first five comments to display ---------------------------------------
-  let getInitialComments = function (arr) {
-    let result;
-    comments = arr;
-    if (arr.length <= COMMENTS_COUNT_STEP) {
-      result = arr;
-      renderCommentsCount(result, arr);
-      loader.classList.add('hidden');
-    }
-    result = getNextComments(arr);
-    return result;
-  };
-
-  // adds initial number of comments ------------------------------------------
-  let initComments = function (arr) {
-    return renderComments(getInitialComments(arr));
-  };
-
-  // set listener to comment loader button ------------------------------------
-  let onLoadMoreClick = function () {
-    socComments.appendChild(renderComments(getNextComments(comments)));
-  };
-
-  window.comments = {
-    onLoadMoreClick: onLoadMoreClick,
-    init: initComments,
-    counter: counter
-  };
-}
-/*let SERVER_URL = 'https://1510.dump.academy/kekstagram';
-let SERVER_URL = 'https://js.dump.academy/kekstagram';
-
-function setup(onLoad, onError) {
-    let xhr = new XMLHttpRequest();
-
-
-function showGallery() {
-  let photosList = document.querySelector('.pictures');
-  let galleryOverlay = document.querySelector('.gallery-overlay');
-  let galleryOverlayClose = galleryOverlay.querySelector('.gallery-overlay-close');
-
-
-}
-
- // close the gallery by pressing esc
-
-
-/*  function onGalleryOverlayEscPress(evt) {
-    window.util.isEscEvent(evt, onGalleryOverlayClose);
-  }
-
-  //open the gallery
-  function onGalleryOverlayOpen() {
-    galleryOverlay.classList.remove('hidden');
-    document.addEventListener('keydown', onGalleryOverlayEscPress);
-  }
-
-  // close the gallery
-  function onGalleryOverlayClose() {
-    galleryOverlay.classList.add('hidden');
-    document.removeEventListener('keydown', onGalleryOverlayEscPress);
-  }
-
-  // photo clicks during capture
-  photosList.addEventListener('click', function (evt) {
-    evt.preventDefault(); // clicking does not reload the page
-    window.preview(evt.target, galleryOverlay, onGalleryOverlayOpen);
-  });
-
-  // press enter when the photo is in focus
-  photosList.addEventListener('keydown', function (evt) {
-    window.util.isEnterEvent(evt, function () {
-      evt.preventDefault(); // so that click does not reload
-      window.preview(evt.target, galleryOverlay, onGalleryOverlayOpen);
-    });
-  };
-
-  // Handler on pressing ENTER when the cross in the gallery is in focus
-  galleryOverlayClose.addEventListener('click', onGalleryOverlayClose);
-
-
-  galleryOverlayClose.addEventListener('keydown', function (evt) {
-    window.util.isEnterEvent(evt, onGalleryOverlayClose);
-  });
-})();
-
-/*Debounce provided
-
-*(function () {
-  let DEBOUNCE_INTERVAL = 300;
-  let lastTimeout;
-
-  // Переданный callback вызывается с задержкой
-  window.debounce = function (callback) {
-    if (lastTimeout) {
-      window.clearTimeout(lastTimeout);
-    }
-
-    lastTimeout = window.setTimeout(callback, DEBOUNCE_INTERVAL);
-  };
-})();
-/*
-const button = document.querySelector('.click-button');
-const popup = document.querySelector('.content');
-
-// Prevent default
-button.onclick = function (evt) {
-  evt.preventDefault();
-
-  // show a class
-  popup.classList.add('show');
-};
-
-nextButton.addEventListener('click', () => {
-  markerGroup.clearLayers();
-  points.slice(points.length / 2).forEach((point) => {
-    createMarker(point);
-  });
-  nextButton.remove();
-});*/
-  //console.log(values[handle]);
+});
