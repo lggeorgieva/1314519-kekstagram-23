@@ -233,7 +233,7 @@ let comments = [
   ];
   let pictureTemplate = document.querySelector('#picture').content.querySelector('a');
   let pictureBlock = document.querySelector('.pictures');
-  let fragment = document.createDocumentFragment();
+  const pictureBlockChildNodesSaved = JSON.parse(JSON.stringify(pictureBlock.childNodes));
   let commentTemplate = document.querySelector('#picture__comments');//.content.querySelector('li');
   let commentBlock = document.querySelector('.social__comments');
 
@@ -273,23 +273,30 @@ function generatePhotos() {
   }
 generatePhotos();
 
+let photoEltsInTheGallery = []; // global var listing the photos currently displayed in the gallery
 function createPhotoElements(photos) {
-    for (var i = 0; i < photos.length; i++) {
-      var newPhoto = pictureTemplate.cloneNode(true);
-      newPhoto.querySelector('img').src = photos[i].url;
-      newPhoto.querySelector('.picture__comments').textContent = photos[i].comments.length;
-      newPhoto.querySelector('.picture__likes').textContent = photos[i].likes;
-      fragment.appendChild(newPhoto);
-
+    // remove the currently displayed photos
+    for (let elt of photoEltsInTheGallery) {
+        pictureBlock.removeChild(elt);
     }
-    pictureBlock.appendChild(fragment);
+    photoEltsInTheGallery = [];
+
+    // display pictures in list photos
+    for (let photo of photos) {
+        let elt = pictureTemplate.cloneNode(true);
+        elt.querySelector('img').src = photo.url;
+        elt.querySelector('.picture__comments').textContent = photo.comments.length;
+        elt.querySelector('.picture__likes').textContent = photo.likes;
+        pictureBlock.appendChild(elt);
+        photoEltsInTheGallery.push(elt);
+    }
+
+    // show gallery buttons
     galleryFiltersButtonsElt.classList.remove('img-filters--inactive');
-  };
-  //createPhotoElements(photos.sort((a,b) => b.comments.length-a.comments.length));
+}
 
-  // The big photo
-
- const bigPicture = document.querySelector('.big-picture');
+// The big photo
+const bigPicture = document.querySelector('.big-picture');
 
 /*
 function getBigPhoto(nu) {
@@ -335,24 +342,54 @@ closeBigPhoto.addEventListener('click', function () {
     bigPicture.classList.add('hidden');
 });
 
+function deactivateGalleryFilterButtons() {
+    galleryFiltersButtonsDefaultElt.classList.remove('img-filters__button--active');
+    galleryFiltersButtonsRandomElt.classList.remove('img-filters__button--active');
+    galleryFiltersButtonsDiscussedElt.classList.remove('img-filters__button--active');
+}
+
 function showPicturesByServerOrder(){
+    deactivateGalleryFilterButtons();
+    galleryFiltersButtonsDefaultElt.classList.add('img-filters__button--active');
     createPhotoElements(photos);
     makeGalleryClickable(photos);
 }
 
 showPicturesByServerOrder();
 
+// copied from https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
+function showPicturesByRandomOrder(){
+    deactivateGalleryFilterButtons();
+    galleryFiltersButtonsRandomElt.classList.add('img-filters__button--active');
+    photosCopy = [];
+    for (let i = 0; i < photos.length; i++) {
+        photosCopy[i] = photos[i];
+    }
+    shuffleArray(photosCopy);
+    photosCopy = photosCopy.slice(0,10);
+    createPhotoElements(photosCopy);
+    makeGalleryClickable(photosCopy);
+}
 
 function showPicturesByCommentOrder(){
-  alert("Start");
-   photosCopy =[];
-   for(let i =0; i< photos.length; i++){
-     photosCopy[i] = photos[i];
-   }
-   photosCopy.sort((a,b) => b.comments.length-a.comments.length);
-   createPhotoElements(photosCopy);
-   makeGalleryClickable(photosCopy);
+    deactivateGalleryFilterButtons();
+    galleryFiltersButtonsDiscussedElt.classList.add('img-filters__button--active');
+    photosCopy = [];
+    for (let i = 0; i < photos.length; i++) {
+        photosCopy[i] = photos[i];
+    }
+    photosCopy.sort((a,b) => b.comments.length - a.comments.length);
+    createPhotoElements(photosCopy);
+    makeGalleryClickable(photosCopy);
 }
 
 galleryFiltersButtonsDefaultElt.addEventListener('click', showPicturesByServerOrder);
+galleryFiltersButtonsRandomElt.addEventListener('click', showPicturesByRandomOrder);
 galleryFiltersButtonsDiscussedElt.addEventListener('click', showPicturesByCommentOrder);
