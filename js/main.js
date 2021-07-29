@@ -187,11 +187,11 @@ submitButtonElt.addEventListener('click', (event) => {
   event.preventDefault();
   if (!isHashtagFieldValid()) { return; }
 
-  //console.log(new FormData(submitFormElt));
   let formData = new FormData(submitFormElt);
-  formData.set('filename', file.name);
-  for(let[name, value] of formData){alert(name + ' ' + value);}
-  alert("I work");
+  // NOTE: Next line commented out because it results in Error 400
+  // formData.set('filename', 'photos/' + formData.get('filename').name);
+  // COMMNENT IN TO DEBUG: next line will print contents of the form to console
+  // for (let [name,value] of formData) { console.log(name + ':' + value); } // DEBUG
   fetch(UPLOAD_URL,
         { method: 'POST',
           credentials: 'same-origin',
